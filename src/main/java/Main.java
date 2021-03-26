@@ -13,10 +13,6 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
-        Theater th = new Theater();
-        th.setId(5);
-        th.setName("qwe");
-        System.out.println(th.getId() + " " + th.getName());
         launch();
     }
 }
