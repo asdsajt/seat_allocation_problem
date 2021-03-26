@@ -8,6 +8,6 @@ public class Controller {
 
     public Controller(View view) {
         this.view = view;
-        System.out.println("itt történik a varázslat");
+        view.init();
     }
 }
