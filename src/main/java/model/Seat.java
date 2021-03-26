@@ -1,11 +1,18 @@
 package model;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import model.utils.SeatStatus;
 
-public @Data class Seat {
+public class Seat {
 
-    private SeatStatus status;
-    private int orderId;
+    @Getter private String roomId;
+
+    @Getter @Setter private SeatStatus status;
+    @Getter @Setter private int orderId;
+
+    public Seat(String roomId) {
+        this.roomId = roomId;
+    }
 
 }
