@@ -1,7 +1,10 @@
 package model;
 
-public class Theater {
+import lombok.Data;
 
+public @Data class Theater {
 
+    private int id;
+    private String name;
 
 }
