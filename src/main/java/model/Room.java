@@ -1,21 +1,23 @@
 package model;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-public @Data class Room {
+import java.util.UUID;
 
-    private int id;
-    private int theaterId;
-    private int columnNum;
-    private int rowNum;
+public class Room {
+
+    @Getter private final String id;
+    @Getter private final String theaterId;
+    @Getter private final int columnNum;
+    @Getter private final int rowNum;
     private Seat[][] rows;
 
-//    public Room(int id, int theaterId, int columnNum, int rowNum) {
-//        this.id = id;
-//        this.theaterId = theaterId;
-//        this.columnNum = columnNum;
-//        this.rowNum = rowNum;
-//
-//    }
+    public Room(String theaterId, int columnNum, int rowNum) {
+        this.id = "RO-" + UUID.randomUUID();
+        this.theaterId = theaterId;
+        this.columnNum = columnNum;
+        this.rowNum = rowNum;
+    }
 
 }

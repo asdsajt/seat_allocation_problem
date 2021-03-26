@@ -1,15 +1,18 @@
 package model;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-public @Data class Theater {
+import java.util.UUID;
 
-    private int id;
-    private String name;
+public class Theater {
 
-//    public Theater(int id, String name) {
-//        this.id = id;
-//        this.name = name;
-//    }
+    @Getter private final String id;
+
+    @Getter @Setter private String name;
+
+    public Theater(String name) {
+        this.id = "TH-" + UUID.randomUUID();
+    }
 
 }

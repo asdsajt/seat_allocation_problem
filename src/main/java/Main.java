@@ -10,6 +10,8 @@ public class Main extends Application {
     public void start(Stage stage) {
         View mainView = new View();
         new Controller(mainView);
+        Theater th = new Theater("Csiky Gergely");
+        System.out.println(th.getId());
     }
 
     public static void main(String[] args) {
