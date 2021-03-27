@@ -18,7 +18,6 @@ public class Main extends Application {
         InputData inputData = new InputData();
         JsonImporter jsonImporter = new JsonImporter();
         jsonImporter.importFile(filePath, inputData);
-        System.out.println(th.getId());
     }
 
     public static void main(String[] args) {

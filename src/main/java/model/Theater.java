@@ -22,4 +22,11 @@ public class Theater {
         this(IdGenerator.generateId(DataType.Theater), name);
     }
 
+    @Override
+    public String toString() {
+        return "Theater{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }

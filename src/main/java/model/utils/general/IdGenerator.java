@@ -12,6 +12,8 @@ public class IdGenerator {
                 return "TH-" + UUID.randomUUID();
             case Room:
                 return "RO-" + UUID.randomUUID();
+            case Order:
+                return "OR-" + UUID.randomUUID();
             default:
                 return "" + UUID.randomUUID();
         }
