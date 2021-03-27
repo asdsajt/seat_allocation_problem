@@ -1,7 +1,9 @@
 package controller;
 
+import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import org.controlsfx.control.spreadsheet.GridBase;
 import org.controlsfx.control.spreadsheet.SpreadsheetCell;
 import org.controlsfx.control.spreadsheet.SpreadsheetCellType;
@@ -17,8 +19,8 @@ public class Controller {
 
     public Controller(View view) {
         this.view = view;
-        spreadSheetListeners = new SpreadSheetClickListeners(this.view.getRoomSpreadSheetView());
         view.init();
+        spreadSheetListeners = new SpreadSheetClickListeners(this.view.getRoomSpreadSheetView(), this.view.getRoomSpreadSheetView().getScene().getWindow());
 
         initComboBoxes();
         configureSpreadSheet(Integer.parseInt(view.getRowNumberTextField().getText()),
@@ -38,7 +40,9 @@ public class Controller {
      */
     private void createListeners() {
         view.getRoomSpreadSheetView().getSelectionModel().getSelectedCells().addListener(spreadSheetListeners.getAllocationSelectorListener());
-
+        view.getDisableSeatsCheckBox().selectedProperty().addListener(this::disableSeatsChanged);
+        view.getGroupNumberComboBox().setOnAction(this::groupNumberChanged);
+        view.getSolveMethodComboBox().setOnAction(this::solveMethodCanged);
         view.getRowNumberTextField().textProperty().addListener((observable, oldValue, newValue) -> {
             try {
                 if (!newValue.matches("\\d*")) {
@@ -62,28 +66,47 @@ public class Controller {
                 throw new RuntimeException(e);
             }
         });
-
-        view.getDisableSeatsCheckBox().selectedProperty().addListener(observable -> {
-            try {
-                if(view.getDisableSeatsCheckBox().isSelected()) {
-                    view.getRoomSpreadSheetView().getSelectionModel().getSelectedCells().removeListener(spreadSheetListeners.getAllocationSelectorListener());
-                    view.getRoomSpreadSheetView().getSelectionModel().getSelectedCells().addListener(spreadSheetListeners.getCellDisableListener());
-                } else {
-                    view.getRoomSpreadSheetView().getSelectionModel().getSelectedCells().removeListener(spreadSheetListeners.getCellDisableListener());
-                    view.getRoomSpreadSheetView().getSelectionModel().getSelectedCells().addListener(spreadSheetListeners.getAllocationSelectorListener());
-                }
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        });
     }
 
 
     /**
+     * Székek tiltására szolgáló checkbox change listenerje
+     * @param observable
+     */
+    private void disableSeatsChanged(Observable observable) {
+        if(view.getDisableSeatsCheckBox().isSelected()) {
+            view.getRoomSpreadSheetView().getSelectionModel().getSelectedCells().removeListener(spreadSheetListeners.getAllocationSelectorListener());
+            view.getRoomSpreadSheetView().getSelectionModel().getSelectedCells().addListener(spreadSheetListeners.getCellDisableListener());
+        } else {
+            view.getRoomSpreadSheetView().getSelectionModel().getSelectedCells().removeListener(spreadSheetListeners.getCellDisableListener());
+            view.getRoomSpreadSheetView().getSelectionModel().getSelectedCells().addListener(spreadSheetListeners.getAllocationSelectorListener());
+        }
+    }
+
+    /**
+     * Csoport változtatás action.
+     * @param actionEvent
+     */
+    private void groupNumberChanged(ActionEvent actionEvent) {
+        spreadSheetListeners.setGroupNumber(Integer.parseInt(view.getGroupNumberComboBox().getValue().split(" ")[0]));
+    }
+
+    /**
+     * Gépi megoldó változtatás action.
+     * @param actionEvent
+     */
+    private void solveMethodCanged(ActionEvent actionEvent) {
+        System.out.println(view.getSolveMethodComboBox().getValue());
+    }
+
+    /**
      * SpreadSheetView konfigurálása
-     *  -
-     * @param rowNumber
-     * @param columnNumber
+     *  - elkészíti a grid-et
+     *  - gridben a cellák magasságát állítja
+     *  - spreadSheethez hozzáadja a gridet
+     *  - spreadSheet oszlopainak méretezése
+     * @param rowNumber: gridben lévő sorok száma
+     * @param columnNumber: gridben lévő oszlopok száma
      */
     private void configureSpreadSheet(int rowNumber, int columnNumber) {
         view.getRoomSpreadSheetView().setGrid(null);
