@@ -46,8 +46,8 @@ public class View extends Stage {
         groupDefinitionExportButton.setGraphic(twoLineVBox("Csoport definíció", "exportálás"));
         solveButton = new Button("Megoldás");
 
-        rowNumberTextField = new TextField("5");
-        columnNumberTextField = new TextField("5");
+        rowNumberTextField = new TextField("10");
+        columnNumberTextField = new TextField("10");
 
         groupDefinitionTextArea = new TextArea();
 
