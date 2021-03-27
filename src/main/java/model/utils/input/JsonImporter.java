@@ -2,6 +2,7 @@ package model.utils.input;
 
 import model.Room;
 import model.Seat;
+import model.Theater;
 import model.utils.enums.SeatStatus;
 import model.utils.temp.InputData;
 import org.json.simple.JSONArray;
@@ -48,7 +49,8 @@ public class JsonImporter extends Importer{
 
     private void parseData(JSONObject content) {
         ArrayList<Room> rooms = parseRooms((JSONArray) content.get("rooms"));
-        System.out.println(rooms.get(0).toString());
+        ArrayList<Theater> theaters = parseTheater((JSONArray) content.get("theaters"));
+        System.out.println(theaters.size());
     }
 
     /**
@@ -63,6 +65,10 @@ public class JsonImporter extends Importer{
             String theaterId = parseString(room.get("theater_id"));
             int columnNum = parseInt(room.get("column_num"));
             int rowNum = parseInt(room.get("row_num"));
+            if (columnNum <= 0 || rowNum <= 0) {
+                System.out.println("Invalid sizing parameters at Room-index: " + id);   // TODO: Move it to GUI
+                continue;
+            }
             Room parsedRoom = new Room(id, theaterId, columnNum, rowNum);
             parseSeats((JSONObject) room.get("rows"), parsedRoom);
             parsedRooms.add(parsedRoom);
@@ -104,6 +110,21 @@ public class JsonImporter extends Importer{
         parsedSeat.setOrderId(orderId);
         parsedSeat.setStatus(status);
         return parsedSeat;
+    }
+
+    /**
+     * Parsing all Theater objects in the provided JSON.
+     * @param theaters JSONObject containing the every Theater's data.
+     */
+    private ArrayList<Theater> parseTheater(JSONArray theaters) {
+        ArrayList<Theater> parsedTheaters = new ArrayList<>();
+        for (Object theaterObject : theaters) {
+            JSONObject theater = (JSONObject) theaterObject;
+            String id = parseString(theater.get("id"));
+            String name = parseString(theater.get("name"));
+            parsedTheaters.add(new Theater(id, name));
+        }
+        return parsedTheaters;
     }
 
 }

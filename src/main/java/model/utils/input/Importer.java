@@ -4,7 +4,7 @@ import model.utils.temp.InputData;
 
 public abstract class Importer {
 
-    private static final int nullIntValue = -999;
+    public static final int nullIntValue = -999;
 
     public abstract void importFile(String filePath, InputData storage);
 
