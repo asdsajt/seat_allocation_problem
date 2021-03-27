@@ -168,8 +168,8 @@ public class View extends Stage {
     }
 
     private Node setComboBoxProperties(ComboBox comboBox) {
-        comboBox.setPrefWidth(130);
-        comboBox.setStyle("-fx-font-size: 14px");
+        comboBox.setPrefWidth(140);
+        comboBox.setStyle("-fx-font-size: 13px");
 
 
         return addNoteToHbox(comboBox);

@@ -11,8 +11,8 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class Controller {
 
-    private View view;
-    private SpreadSheetClickListeners spreadSheetListeners;
+    private final View view;
+    private final SpreadSheetClickListeners spreadSheetListeners;
 
 
     public Controller(View view) {
@@ -20,11 +20,22 @@ public class Controller {
         spreadSheetListeners = new SpreadSheetClickListeners(this.view.getRoomSpreadSheetView());
         view.init();
 
+        initComboBoxes();
         configureSpreadSheet(Integer.parseInt(view.getRowNumberTextField().getText()),
                 Integer.parseInt(view.getColumnNumberTextField().getText()));
         createListeners();
     }
 
+    private void initComboBoxes() {
+        view.getGroupNumberComboBox().setItems(ComboBoxStrings.GROUP_SELECTOR_STRINGS);
+        view.getGroupNumberComboBox().setValue(ComboBoxStrings.GROUP_SELECTOR_STRINGS.get(0));
+        view.getSolveMethodComboBox().setItems(ComboBoxStrings.SOLVER_METHOD_STRINGS);
+        view.getSolveMethodComboBox().setValue("Válasszon...");
+    }
+
+    /**
+     * Listenerek elkészítése a különböző beviteli mezőknek.
+     */
     private void createListeners() {
         view.getRoomSpreadSheetView().getSelectionModel().getSelectedCells().addListener(spreadSheetListeners.getAllocationSelectorListener());
 
@@ -69,7 +80,7 @@ public class Controller {
 
 
     /**
-     * SpreaSheetView konfigurálása
+     * SpreadSheetView konfigurálása
      *  -
      * @param rowNumber
      * @param columnNumber
