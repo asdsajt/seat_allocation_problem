@@ -90,12 +90,13 @@ public class View extends Stage {
     }
 
     private void initBorderPaneCenter() {
-        roomSpreadSheetView.setGrid(null);
         roomSpreadSheetView.setContextMenu(null);
         roomSpreadSheetView.setShowColumnHeader(false);
         roomSpreadSheetView.setShowRowHeader(false);
-        roomSpreadSheetView.setMaxWidth(850);
-        roomSpreadSheetView.setMaxHeight(850);
+        roomSpreadSheetView.setMinWidth(700);
+        roomSpreadSheetView.setMinHeight(700);
+        roomSpreadSheetView.setMaxWidth(700);
+        roomSpreadSheetView.setMaxHeight(700);
         roomSpreadSheetView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         roomSpreadSheetView.setPadding(new Insets(10));
 
@@ -177,15 +178,6 @@ public class View extends Stage {
     private TextField setNumberTextFieldProperties(TextField textField) {
         textField.setMaxWidth(100);
         textField.setStyle("-fx-font-size: 14px");
-        textField.textProperty().addListener((observable, oldValue, newValue) -> {
-            try {
-                if (!newValue.matches("\\d*")) {
-                    textField.setText(newValue.replaceAll("[^\\d]", ""));
-                }
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        });
         return textField;
     }
 
