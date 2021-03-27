@@ -12,7 +12,7 @@ public class Theater {
     @Getter @Setter private String name;
 
     // Only for importing with valid IDs
-    public Theater(String id, String mame) {
+    public Theater(String id, String name) {
         this.id = id;
         this.name = name;
     }
