@@ -84,7 +84,7 @@ public class View extends Stage {
         label.setStyle("-fx-font-size: 26px; -fx-font-weight: bold");
         VBox vBox = new VBox(label);
         vBox.setAlignment(Pos.CENTER);
-        vBox.setPadding(new Insets(20,10,20,10));
+        vBox.setPadding(new Insets(20, 10, 20, 10));
 
         mainBorderPane.setTop(vBox);
     }
@@ -105,12 +105,12 @@ public class View extends Stage {
 
     private void initBorderPaneRight() {
         GridPane rightSideGridPane = new GridPane();
-        rightSideGridPane.setPadding(new Insets(0,0,10,0));
+        rightSideGridPane.setPadding(new Insets(0, 0, 10, 0));
 
         Label label = new Label("Terem adatai");
         label.setStyle("-fx-font-size: 18px; -fx-font-weight: bold");
         label.setPadding(new Insets(0, 10, 0, 0));
-        rightSideGridPane.add(label, 0, 0, 2,1);
+        rightSideGridPane.add(label, 0, 0, 2, 1);
         rightSideGridPane.add(setNormalTextProperties("Sorok száma"), 0, 1);
         rightSideGridPane.add(setNormalTextProperties("Oszlopok száma"), 0, 2);
         rightSideGridPane.add(setNormalTextProperties("Székek eltűntetése"), 0, 3);
@@ -144,17 +144,17 @@ public class View extends Stage {
         return button;
     }
 
-    private HBox buttonPositioner (Button b1, Button b2) {
+    private HBox buttonPositioner(Button b1, Button b2) {
         HBox hBox = new HBox(b1, b2);
         double spacing = (groupDefinitionTextArea.getMaxWidth() - b1.getMinWidth() - b2.getMinWidth() - 40) / 2;
-        hBox.setPadding(new Insets(5,10,5,10));
+        hBox.setPadding(new Insets(5, 10, 5, 10));
         hBox.setSpacing(spacing);
         return hBox;
     }
 
     private HBox addNoteToHbox(Node node) {
         HBox hBox = new HBox(node);
-        hBox.setPadding(new Insets(5,10,5,0));
+        hBox.setPadding(new Insets(5, 10, 5, 0));
 
         return hBox;
     }
@@ -192,7 +192,7 @@ public class View extends Stage {
     private Label setNormalTextProperties(String text) {
         Label label = new Label(text);
         label.setStyle("-fx-font-size: 14px");
-        label.setPadding(new Insets(6,10,6,0));
+        label.setPadding(new Insets(6, 10, 6, 0));
 
         return label;
     }

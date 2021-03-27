@@ -29,7 +29,7 @@ public class SpreadSheetClickListeners {
                 SpreadsheetCell cell = spreadsheetView.getGrid().getRows().get(cellpos.getRow()).get(cellpos.getColumn());
                 if (cell.getStyle().equals(normalStyle)) {
                     cell.setStyle(blockedStyle);
-                } else if (cell.getStyle().equals(blockedStyle)){
+                } else if (cell.getStyle().equals(blockedStyle)) {
                     cell.setStyle(normalStyle);
                 }
 
@@ -48,23 +48,23 @@ public class SpreadSheetClickListeners {
                     int index;
 
                     //összetartozás
-                    if(cell.getColumn() != spreadsheetView.getGrid().getColumnCount() - 1 &&
+                    if (cell.getColumn() != spreadsheetView.getGrid().getColumnCount() - 1 &&
                             spreadsheetView.getGrid().getRows().get(cellpos.getRow()).get(cell.getColumn() + 1).getStyle().equals(selectedCellStyle) &&
                             spreadsheetView.getGrid().getRows().get(cellpos.getRow()).get(cell.getColumn() + 1).getText().equals("1")) {
                         error = "HELY_KIHAGYAS";
-                    } else if(cell.getColumn() != 0 &&
+                    } else if (cell.getColumn() != 0 &&
                             spreadsheetView.getGrid().getRows().get(cellpos.getRow()).get(cell.getColumn() - 1).getStyle().equals(selectedCellStyle) &&
                             spreadsheetView.getGrid().getRows().get(cellpos.getRow()).get(cell.getColumn() - 1).getText().equals("1")) {
                         error = "HELY_KIHAGYAS";
-                    } else if(cell.getColumn() != spreadsheetView.getGrid().getColumnCount() - 1 &&
+                    } else if (cell.getColumn() != spreadsheetView.getGrid().getColumnCount() - 1 &&
                             spreadsheetView.getGrid().getRows().get(cellpos.getRow()).get(cell.getColumn() + 1).getStyle().equals(selectedCellStyle) &&
                             !spreadsheetView.getGrid().getRows().get(cellpos.getRow()).get(cell.getColumn() + 1).getText().equals(groupNumber + "")) {
                         error = "HELY_KIHAGYAS";
-                    } else if(cell.getColumn() != 0 &&
+                    } else if (cell.getColumn() != 0 &&
                             spreadsheetView.getGrid().getRows().get(cellpos.getRow()).get(cell.getColumn() - 1).getStyle().equals(selectedCellStyle) &&
                             !spreadsheetView.getGrid().getRows().get(cellpos.getRow()).get(cell.getColumn() - 1).getText().equals(groupNumber + "")) {
                         error = "HELY_KIHAGYAS";
-                    } else if((cell.getColumn() != spreadsheetView.getGrid().getColumnCount() - 1 &&
+                    } else if ((cell.getColumn() != spreadsheetView.getGrid().getColumnCount() - 1 &&
                             spreadsheetView.getGrid().getRows().get(cellpos.getRow()).get(cell.getColumn() + 1).getStyle().equals(selectedCellStyle)) ||
                             (cell.getColumn() != 0 &&
                                     spreadsheetView.getGrid().getRows().get(cellpos.getRow()).get(cell.getColumn() - 1).getStyle().equals(selectedCellStyle))) {
@@ -77,7 +77,7 @@ public class SpreadSheetClickListeners {
                         }
                         index = cell.getColumn() - 1;
                         while (index != -1 && spreadsheetView.getGrid().getRows().get(cellpos.getRow()).get(index).getText().equals(groupNumber + "")) {
-                            if(spreadsheetView.getGrid().getRows().get(cellpos.getRow()).get(index).getText().equals(groupNumber + ""))
+                            if (spreadsheetView.getGrid().getRows().get(cellpos.getRow()).get(index).getText().equals(groupNumber + ""))
                                 count++;
                             index--;
                         }
@@ -88,7 +88,7 @@ public class SpreadSheetClickListeners {
                         int rightBlackPos = -1, leftBlackPos = -1;
                         index = cell.getColumn();
                         while (index != spreadsheetView.getGrid().getColumnCount() && rightBlackPos == -1) {
-                            if(spreadsheetView.getGrid().getRows().get(cellpos.getRow()).get(index).getStyle().equals(blockedStyle) ||
+                            if (spreadsheetView.getGrid().getRows().get(cellpos.getRow()).get(index).getStyle().equals(blockedStyle) ||
                                     ((index < spreadsheetView.getGrid().getColumnCount() - 1) && spreadsheetView.getGrid().getRows().get(cellpos.getRow()).get(index + 1).getStyle().equals(selectedCellStyle))) {
                                 rightBlackPos = index;
                             }
@@ -96,17 +96,17 @@ public class SpreadSheetClickListeners {
                         }
                         index = cell.getColumn();
                         while (index != -1 && leftBlackPos == -1) {
-                            if(spreadsheetView.getGrid().getRows().get(cellpos.getRow()).get(index).getStyle().equals(blockedStyle) ||
+                            if (spreadsheetView.getGrid().getRows().get(cellpos.getRow()).get(index).getStyle().equals(blockedStyle) ||
                                     ((index > 0) && spreadsheetView.getGrid().getRows().get(cellpos.getRow()).get(index - 1).getStyle().equals(selectedCellStyle))) {
                                 leftBlackPos = index;
                             }
                             index--;
                         }
-                        if(((rightBlackPos == -1 ? spreadsheetView.getGrid().getColumnCount() : rightBlackPos) - leftBlackPos - 1) < groupNumber) {
+                        if (((rightBlackPos == -1 ? spreadsheetView.getGrid().getColumnCount() : rightBlackPos) - leftBlackPos - 1) < groupNumber) {
                             error = "NEM_FER_EL"; //nem fér el hiba
                         } else {
                             //kettő közé behelyezés
-                            if(cell.getColumn() != 0 && cell.getColumn() != spreadsheetView.getGrid().getColumnCount() &&
+                            if (cell.getColumn() != 0 && cell.getColumn() != spreadsheetView.getGrid().getColumnCount() &&
                                     spreadsheetView.getGrid().getRows().get(cellpos.getRow()).get(cell.getColumn() - 1).getStyle().equals(selectedCellStyle) &&
                                     spreadsheetView.getGrid().getRows().get(cellpos.getRow()).get(cell.getColumn() + 1).getStyle().equals(selectedCellStyle)) {
                                 error = "KET_CSOPORT_KOZOTT"; //kettő közé nem lehet behelyezni
@@ -114,19 +114,18 @@ public class SpreadSheetClickListeners {
                         }
                     }
 
-                    if(error.equals("")) {
+                    if (error.equals("")) {
                         cell.setItem(groupNumber + "");
                         cell.setStyle(selectedCellStyle);
                     } else {
                         alertMaker(window, error);
                     }
-                } else if (cell.getStyle().equals(selectedCellStyle)){
-                    if(cell.getColumn() != 0 && cell.getColumn() != spreadsheetView.getGrid().getColumnCount() &&
-                            spreadsheetView.getGrid().getRows().get(cellpos.getRow()).get(cell.getColumn()-1).getStyle().equals(selectedCellStyle) &&
-                            spreadsheetView.getGrid().getRows().get(cellpos.getRow()).get(cell.getColumn()+1).getStyle().equals(selectedCellStyle)) {
+                } else if (cell.getStyle().equals(selectedCellStyle)) {
+                    if (cell.getColumn() != 0 && cell.getColumn() != spreadsheetView.getGrid().getColumnCount() &&
+                            spreadsheetView.getGrid().getRows().get(cellpos.getRow()).get(cell.getColumn() - 1).getStyle().equals(selectedCellStyle) &&
+                            spreadsheetView.getGrid().getRows().get(cellpos.getRow()).get(cell.getColumn() + 1).getStyle().equals(selectedCellStyle)) {
                         alertMaker(window, "KIVETEL_HIBA");
-                    }
-                    else {
+                    } else {
                         cell.setStyle(normalStyle);
                         cell.setItem("");
                     }

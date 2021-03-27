@@ -48,7 +48,7 @@ public class Controller {
                 if (!newValue.matches("\\d*")) {
                     view.getRowNumberTextField().setText(newValue.replaceAll("[^\\d]", ""));
                 }
-                if(!newValue.replaceAll("[^\\d]", "").equals(""))
+                if (!newValue.replaceAll("[^\\d]", "").equals(""))
                     configureSpreadSheet(Integer.parseInt(newValue.replaceAll("[^\\d]", "")), Integer.parseInt(view.getColumnNumberTextField().getText()));
             } catch (Exception e) {
                 throw new RuntimeException(e);
@@ -60,7 +60,7 @@ public class Controller {
                 if (!newValue.matches("\\d*")) {
                     view.getColumnNumberTextField().setText(newValue.replaceAll("[^\\d]", ""));
                 }
-                if(!newValue.replaceAll("[^\\d]", "").equals(""))
+                if (!newValue.replaceAll("[^\\d]", "").equals(""))
                     configureSpreadSheet(Integer.parseInt(view.getRowNumberTextField().getText()), Integer.parseInt(newValue.replaceAll("[^\\d]", "")));
             } catch (Exception e) {
                 throw new RuntimeException(e);
@@ -71,10 +71,11 @@ public class Controller {
 
     /**
      * Székek tiltására szolgáló checkbox change listenerje
+     *
      * @param observable
      */
     private void disableSeatsChanged(Observable observable) {
-        if(view.getDisableSeatsCheckBox().isSelected()) {
+        if (view.getDisableSeatsCheckBox().isSelected()) {
             view.getRoomSpreadSheetView().getSelectionModel().getSelectedCells().removeListener(spreadSheetListeners.getAllocationSelectorListener());
             view.getRoomSpreadSheetView().getSelectionModel().getSelectedCells().addListener(spreadSheetListeners.getCellDisableListener());
         } else {
@@ -85,6 +86,7 @@ public class Controller {
 
     /**
      * Csoport változtatás action.
+     *
      * @param actionEvent
      */
     private void groupNumberChanged(ActionEvent actionEvent) {
@@ -93,6 +95,7 @@ public class Controller {
 
     /**
      * Gépi megoldó változtatás action.
+     *
      * @param actionEvent
      */
     private void solveMethodCanged(ActionEvent actionEvent) {
@@ -101,11 +104,12 @@ public class Controller {
 
     /**
      * SpreadSheetView konfigurálása
-     *  - elkészíti a grid-et
-     *  - gridben a cellák magasságát állítja
-     *  - spreadSheethez hozzáadja a gridet
-     *  - spreadSheet oszlopainak méretezése
-     * @param rowNumber: gridben lévő sorok száma
+     * - elkészíti a grid-et
+     * - gridben a cellák magasságát állítja
+     * - spreadSheethez hozzáadja a gridet
+     * - spreadSheet oszlopainak méretezése
+     *
+     * @param rowNumber:    gridben lévő sorok száma
      * @param columnNumber: gridben lévő oszlopok száma
      */
     private void configureSpreadSheet(int rowNumber, int columnNumber) {
@@ -119,7 +123,7 @@ public class Controller {
         AtomicReference<Double> maxSize = new AtomicReference<>();
         maxSize.set(66.0);
         while ((rowNumber >= columnNumber ? rowNumber : columnNumber) * maxSize.get() > 660 && maxSize.get() != 35) {
-            maxSize.set(maxSize.get()-1);
+            maxSize.set(maxSize.get() - 1);
         }
 
         gridBase.setRowHeightCallback(param -> {
@@ -142,16 +146,17 @@ public class Controller {
 
     /**
      * SpreadSheetView-ban megjelenő Griden lévő cellák inicializálása
-     * @param rowNumber: sor szám
+     *
+     * @param rowNumber:    sor szám
      * @param columnNumber: oszlop szám
      * @return
      */
     private GridBase createGrid(int rowNumber, int columnNumber) {
         GridBase gridBase = new GridBase(rowNumber, columnNumber);
         ObservableList<ObservableList<SpreadsheetCell>> rows = FXCollections.observableArrayList();
-        for(int i = 0; i < rowNumber; i++) {
+        for (int i = 0; i < rowNumber; i++) {
             ObservableList<SpreadsheetCell> rowList = FXCollections.observableArrayList();
-            for(int j = 0; j < columnNumber; j++) {
+            for (int j = 0; j < columnNumber; j++) {
                 SpreadsheetCell cell = SpreadsheetCellType.STRING.createCell(i, j, 1, 1, "");
                 cell.setStyle(spreadSheetListeners.getNormalStyle());
                 rowList.add(cell);
