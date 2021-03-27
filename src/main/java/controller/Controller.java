@@ -4,9 +4,11 @@ import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.scene.control.Alert;
 import org.controlsfx.control.spreadsheet.GridBase;
 import org.controlsfx.control.spreadsheet.SpreadsheetCell;
 import org.controlsfx.control.spreadsheet.SpreadsheetCellType;
+import solver.greedy.GreedySolver;
 import view.View;
 
 import java.util.concurrent.atomic.AtomicReference;
@@ -42,7 +44,7 @@ public class Controller {
         view.getRoomSpreadSheetView().getSelectionModel().getSelectedCells().addListener(spreadSheetListeners.getAllocationSelectorListener());
         view.getDisableSeatsCheckBox().selectedProperty().addListener(this::disableSeatsChanged);
         view.getGroupNumberComboBox().setOnAction(this::groupNumberChanged);
-        view.getSolveMethodComboBox().setOnAction(this::solveMethodCanged);
+        view.getSolveButton().setOnAction(this::solverPressed);
         view.getRowNumberTextField().textProperty().addListener((observable, oldValue, newValue) -> {
             try {
                 if (!newValue.matches("\\d*")) {
@@ -68,6 +70,32 @@ public class Controller {
         });
     }
 
+    private void solverPressed(ActionEvent actionEvent) {
+        if (view.getDisableSeatsCheckBox().isSelected()) {
+            view.getRoomSpreadSheetView().getSelectionModel().getSelectedCells().removeListener(spreadSheetListeners.getCellDisableListener());
+        } else {
+            view.getRoomSpreadSheetView().getSelectionModel().getSelectedCells().removeListener(spreadSheetListeners.getAllocationSelectorListener());
+        }
+        switch (view.getSolveMethodComboBox().getValue()) {
+            case "Válasszon...":
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setHeaderText(null);
+                alert.initOwner(view.getSolveButton().getScene().getWindow());
+                alert.setTitle("Megoldó hiba");
+                alert.setContentText("Először válasszon a megoldók közül!");
+                break;
+            case "Mohó algoritmus":
+                GreedySolver greedySolver = new GreedySolver(view.getRoomSpreadSheetView(), view.getGroupDefinitionTextArea().getText().trim());
+                view.getRoomSpreadSheetView().setGrid(greedySolver.solve());
+                break;
+        }
+        if (view.getDisableSeatsCheckBox().isSelected()) {
+            view.getRoomSpreadSheetView().getSelectionModel().getSelectedCells().addListener(spreadSheetListeners.getCellDisableListener());
+        } else {
+            view.getRoomSpreadSheetView().getSelectionModel().getSelectedCells().addListener(spreadSheetListeners.getAllocationSelectorListener());
+        }
+    }
+
 
     /**
      * Székek tiltására szolgáló checkbox change listenerje
@@ -91,15 +119,6 @@ public class Controller {
      */
     private void groupNumberChanged(ActionEvent actionEvent) {
         spreadSheetListeners.setGroupNumber(Integer.parseInt(view.getGroupNumberComboBox().getValue().split(" ")[0]));
-    }
-
-    /**
-     * Gépi megoldó változtatás action.
-     *
-     * @param actionEvent
-     */
-    private void solveMethodCanged(ActionEvent actionEvent) {
-        System.out.println(view.getSolveMethodComboBox().getValue());
     }
 
     /**
@@ -158,7 +177,7 @@ public class Controller {
             ObservableList<SpreadsheetCell> rowList = FXCollections.observableArrayList();
             for (int j = 0; j < columnNumber; j++) {
                 SpreadsheetCell cell = SpreadsheetCellType.STRING.createCell(i, j, 1, 1, "");
-                cell.setStyle(spreadSheetListeners.getNormalStyle());
+                cell.setStyle(CellStyles.NORMAL_CELL_STYLE);
                 rowList.add(cell);
             }
             rows.add(rowList);
