@@ -10,7 +10,7 @@ import view.View;
 public class Main extends Application {
 
     private static final String inFilePath = "temp_files/input_1.json";  // TODO: Replace with GUI fileExplorer
-    private static final String outFilePath = "temp_files/input_1.json";  // TODO: Replace with GUI fileExplorer
+    private static final String outFilePath = "temp_files/output_1.json";  // TODO: Replace with GUI fileExplorer
 
     @Override
     public void start(Stage stage) {
