@@ -1,9 +1,9 @@
 package model;
 
 import lombok.Getter;
-import model.utils.SeatStatus;
-
-import java.util.UUID;
+import model.utils.enums.DataType;
+import model.utils.enums.SeatStatus;
+import model.utils.general.IdGenerator;
 
 public class Room {
 
@@ -13,16 +13,28 @@ public class Room {
     @Getter private final int rowNum;
     @Getter private Seat[][] rows;
 
-    public Room(String theaterId, int columnNum, int rowNum) {
-        this.id = "RO-" + UUID.randomUUID();
+    public Room(String id, String theaterId, int columnNum, int rowNum) {
+        this.id = id;
         this.theaterId = theaterId;
         this.columnNum = columnNum;
         this.rowNum = rowNum;
         generateSeats();
     }
 
+    public Room(String theaterId, int columnNum, int rowNum) {
+        this(IdGenerator.generateId(DataType.Room), theaterId, columnNum, rowNum);
+    }
+
     public Room(int columnNum, int rowNum) {
         this("TH-Unknown", columnNum, rowNum);
+    }
+
+    public Seat[] getRow(int rowNum) {
+        return this.rows[rowNum];
+    }
+
+    public Seat getSeat(int rowNum, int colNum) {
+        return this.rows[rowNum][colNum];
     }
 
     private void generateSeats() {
@@ -35,14 +47,6 @@ public class Room {
                 rows[i][j] = currentSeat;
             }
         }
-    }
-
-    public Seat[] getRow(int rowNum) {
-        return this.rows[rowNum];
-    }
-
-    public Seat getSeat(int rowNum, int colNum) {
-        return this.rows[rowNum][colNum];
     }
 
 }

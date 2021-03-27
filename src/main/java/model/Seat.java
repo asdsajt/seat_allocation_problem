@@ -2,7 +2,7 @@ package model;
 
 import lombok.Getter;
 import lombok.Setter;
-import model.utils.SeatStatus;
+import model.utils.enums.SeatStatus;
 
 public class Seat {
 

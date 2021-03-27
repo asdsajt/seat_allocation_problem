@@ -4,6 +4,7 @@ import lombok.Getter;
 import model.Room;
 import model.Theater;
 import model.utils.temp.InputData;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -18,7 +19,7 @@ public class JsonImporter extends Importer{
     public final void importFile(String filePath, InputData storage) {
         JSONObject content = readJson(filePath);
         if (content == null) { return; }
-        System.out.println("Object read");
+        parseData(content);
     }
 
     private JSONObject readJson(String filePath) {
@@ -42,6 +43,24 @@ public class JsonImporter extends Importer{
             e.printStackTrace();
             return null;
         }
+    }
+
+    private void parseData(JSONObject content) {
+        parseRooms((JSONArray) content.get("rooms"));
+    }
+
+    private void parseRooms(JSONArray rooms) {
+        JSONObject room = (JSONObject) rooms.get(1);
+        String id = (String) room.get("id");
+        String theaterId = (String) room.get("theater_id");
+        int columnNum = parseInt(room.get("column_num"));
+        int rowNum = parseInt(room.get("row_num"));
+        Room parsedRoom = new Room(id, theaterId, columnNum, rowNum);
+    }
+
+    private int parseInt(Object object) {
+        String value = object.toString();
+        return Integer.parseInt(value);
     }
 
 }

@@ -1,4 +1,4 @@
-package model.utils;
+package model.utils.enums;
 
 public enum SeatStatus {
     empty,
