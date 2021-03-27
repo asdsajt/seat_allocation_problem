@@ -10,11 +10,15 @@ public class Seat {
     @Getter private final String roomId;
 
     @Getter @Setter private SeatStatus status;
-    @Getter @Setter private int orderId;
+    @Getter @Setter private String orderId;
 
     public Seat(String position, String roomId) {
         this.position = position;
         this.roomId = roomId;
+    }
+
+    public static String generatePositionString(int row, int column) {
+        return row + ":" + column;
     }
 
 }

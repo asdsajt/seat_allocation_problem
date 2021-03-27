@@ -1,7 +1,7 @@
 package model.utils.enums;
 
 public enum SeatStatus {
-    empty,
-    taken,
-    removed
+    Empty,
+    Taken,
+    Removed
 }
