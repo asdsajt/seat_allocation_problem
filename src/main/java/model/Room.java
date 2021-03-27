@@ -5,6 +5,8 @@ import model.utils.enums.DataType;
 import model.utils.enums.SeatStatus;
 import model.utils.general.IdGenerator;
 
+import java.util.ArrayList;
+
 public class Room {
 
     @Getter private final String id;
@@ -55,4 +57,20 @@ public class Room {
         }
     }
 
+    @Override
+    public String toString() {
+        ArrayList<String> seatInfo = new ArrayList<>();
+        for (int r = 0; r < this.rowNum; r++) {
+            for (int c = 0; c < this.columnNum; c++) {
+                seatInfo.add(getSeat(r, c).toString());
+            }
+        }
+        return "Room{" +
+                "id='" + id + '\'' +
+                ", theaterId='" + theaterId + '\'' +
+                ", columnNum=" + columnNum +
+                ", rowNum=" + rowNum +
+                ", rows=" + String.join(", ", seatInfo) +
+                '}';
+    }
 }

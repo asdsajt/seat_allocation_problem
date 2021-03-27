@@ -21,4 +21,13 @@ public class Seat {
         return row + ":" + column;
     }
 
+    @Override
+    public String toString() {
+        return "Seat{" +
+                "position='" + position + '\'' +
+                ", roomId='" + roomId + '\'' +
+                ", status=" + status +
+                ", orderId='" + orderId + '\'' +
+                '}';
+    }
 }

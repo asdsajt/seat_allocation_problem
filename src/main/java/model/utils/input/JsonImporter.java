@@ -12,6 +12,7 @@ import org.json.simple.parser.ParseException;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class JsonImporter extends Importer{
 
@@ -46,26 +47,34 @@ public class JsonImporter extends Importer{
     }
 
     private void parseData(JSONObject content) {
-        parseRooms((JSONArray) content.get("rooms"));
+        ArrayList<Room> rooms = parseRooms((JSONArray) content.get("rooms"));
+        System.out.println(rooms.get(0).toString());
     }
 
-    private void parseRooms(JSONArray rooms) {
-        JSONObject room = (JSONObject) rooms.get(1);
-        String id = parseString(room.get("id"));
-        String theaterId = parseString(room.get("theater_id"));
-        int columnNum = parseInt(room.get("column_num"));
-        int rowNum = parseInt(room.get("row_num"));
-        Room parsedRoom = new Room(id, theaterId, columnNum, rowNum);
-        parseSeats((JSONObject) room.get("rows"), parsedRoom);
-        System.out.println(parsedRoom.getSeat(0,0).getStatus());
-        System.out.println(parsedRoom.getSeat(1,1).getStatus());
+    /**
+     * Parsing all Room objects in the provided JSON.
+     * @param rooms JSONObject containing the every Room's data.
+     */
+    private ArrayList<Room> parseRooms(JSONArray rooms) {
+        ArrayList<Room> parsedRooms = new ArrayList<>();
+        for (Object roomObject : rooms) {
+            JSONObject room = (JSONObject) roomObject;
+            String id = parseString(room.get("id"));
+            String theaterId = parseString(room.get("theater_id"));
+            int columnNum = parseInt(room.get("column_num"));
+            int rowNum = parseInt(room.get("row_num"));
+            Room parsedRoom = new Room(id, theaterId, columnNum, rowNum);
+            parseSeats((JSONObject) room.get("rows"), parsedRoom);
+            parsedRooms.add(parsedRoom);
+        }
+        return parsedRooms;
     }
 
     // TODO-Optimize: Create a new constructor for Room, where it does not generate seats.
     //  Add them now instead of replacing the (unused) old ones.
 
     /**
-     * Parsing all the seats and updating the rows. Should be called in Room-parsing.
+     * Parsing all the Seats and updating the rows. Should be called in Room-parsing.
      * @param rows JSONObject containing the current Room's row data.
      * @param parsedRoom The current Room's data. This will be updated.
      */
