@@ -1,0 +1,68 @@
+{
+   "rooms":[
+      {
+         "id":"123",
+         "theater_id":"1",
+         "column_num":"5",
+         "row_num":"4",
+         "rows":{
+            "0": [
+				{"status": 1, "orderId": null},
+				{"status": 1, "orderId": null},
+				{"status": 0, "orderId": null},
+				{"status": 1, "orderId": null},
+				{"status": 1, "orderId": null},
+            ],
+            "1": [
+				{"status": 1, "orderId": "OR-2"},
+				{"status": 1, "orderId": null},
+				{"status": 0, "orderId": null},
+				{"status": 1, "orderId": null},
+				{"status": 1, "orderId": "OR-2"},
+            ],
+            "2": [
+				{"status": 1, "orderId": "OR-1"},
+				{"status": 1, "orderId": "OR-1"},
+				{"status": 1, "orderId": "OR-1"},
+				{"status": 1, "orderId": "OR-1"},
+				{"status": 1, "orderId": null},
+            ],
+            "3": [
+				{"status": 1, "orderId": null},
+				{"status": 1, "orderId": null},
+				{"status": 0, "orderId": "OR-3"},
+				{"status": 1, "orderId": null},
+				{"status": 1, "orderId": null},
+            ]
+         }
+      },
+      {
+         "id":"456",
+         "theater_id":"2",
+         "column_num":"3",
+         "row_num":"2",
+         "rows":{
+            "0": [
+				{"status": 1, "orderId": null},
+				{"status": 1, "orderId": null},
+				{"status": 0, "orderId": null},
+            ],
+            "1": [
+				{"status": 1, "orderId": null},
+				{"status": 0, "orderId": null},
+				{"status": 1, "orderId": null},
+            ]
+         }
+      }
+   ],
+   "theaters": [
+    {
+      "id": "1",
+      "name": "szinhaz 1"
+    },
+    {
+      "id": "2",
+      "name": "szinhaz 2"
+    }
+  ]
+}
