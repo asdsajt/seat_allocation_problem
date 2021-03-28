@@ -141,9 +141,34 @@ public class DatabaseHandler {
         return null;
     }
 
+    private String findTheaterKey(Theater theater){
+        try(MongoClient mongoClient = new MongoClient(uri)) {
+            MongoDatabase database = mongoClient.getDatabase("Theater");
+            MongoCollection<Document> collection = database.getCollection("Theater");
+            Document querry = new Document("_id", new ObjectId("605e1e30c3e6d4caaf7cb198"));
+            Document result = collection.find(querry).iterator().next();
+
+            JSONObject jo = new JSONObject(result.toJson());
+            for (String element: jo.keySet()) {
+                if (isInteger(element, 10)) {
+                    if(jo.getJSONObject(element).getString("id").equals(theater.getId())){
+                        return element;
+                    }
+                }
+            }
+        }
+
+        return null;
+    }
+
     private BasicDBObject convertOriginalToObject(String roomId){
         Room room = getRoomById(roomId);
         return convertRoomToObject(room);
+    }
+
+    private BasicDBObject convertOriginalTheaterToObject(String theaterId){
+        Theater theater = getTheaterById(theaterId);
+        return convertTheaterToObject(theater);
     }
 
     private BasicDBObject convertRoomToObject(Room room){
@@ -296,6 +321,26 @@ public class DatabaseHandler {
             MongoDatabase database = mongoClient.getDatabase("Theater");
             MongoCollection<Document> collection = database.getCollection("Theater");
             collection.updateOne(new Document(), updateObject);
+        }
+        catch (Exception e){
+            throw e;
+        }
+    }
+
+    public void updateTheater(Theater theater){
+        BasicDBObject query = new BasicDBObject();
+        query.put(findTheaterKey(theater), convertOriginalTheaterToObject(theater.getId()));
+
+        BasicDBObject newDocument = new BasicDBObject();
+        newDocument.put(findTheaterKey(theater), convertTheaterToObject(theater));
+
+        BasicDBObject updateObject = new BasicDBObject();
+        updateObject.put("$set", newDocument);
+
+        try(MongoClient mongoClient = new MongoClient(uri)) {
+            MongoDatabase database = mongoClient.getDatabase("Theater");
+            MongoCollection<Document> collection = database.getCollection("Theater");
+            collection.updateOne(query, updateObject);
         }
         catch (Exception e){
             throw e;
