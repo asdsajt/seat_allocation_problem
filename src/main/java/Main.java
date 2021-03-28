@@ -19,12 +19,11 @@ public class Main extends Application {
         View mainView = new View();
         new Controller(mainView);
         Theater th = new Theater("Csiky Gergely");
-        InputData inputData = new InputData();
         JsonImporter jsonImporter = new JsonImporter();
-        jsonImporter.importFile(inFilePath, inputData);
+        jsonImporter.importFile(inFilePath);
         // DatabaseLoader.loadAll(inputData);
-        JsonExporter jsonExporter = new JsonExporter();
-        jsonExporter.exportFile(outFilePath, inputData);
+        JsonExporter jsonExporter = new JsonExporter(InputData.getInstance());
+        jsonExporter.exportFile(outFilePath);
     }
 
     public static void main(String[] args) {

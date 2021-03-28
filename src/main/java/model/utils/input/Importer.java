@@ -6,7 +6,7 @@ public abstract class Importer {
 
     public static final int nullIntValue = -999;
 
-    public abstract void importFile(String filePath, InputData storage);
+    public abstract void importFile(String filePath);
 
     protected static String parseString(Object object) {
         try {

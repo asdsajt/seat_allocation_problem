@@ -4,21 +4,28 @@ import lombok.Getter;
 import model.Order;
 import model.Room;
 import model.Theater;
+import model.utils.interfaces.IStorage;
 
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class InputData {    // TODO: Should be replaced by the data source of the GUI-Controller
+public class InputData implements IStorage {    // TODO: Should be replaced by the data source of the GUI-Controller
 
     @Getter private ArrayList<Theater> theaters;
     @Getter private ArrayList<Room> rooms;
     @Getter private ArrayList<Order> orders;
 
-    public InputData() {
+    private static final InputData instance = new InputData();
+
+    private InputData() {
         theaters = new ArrayList<>();
         rooms = new ArrayList<>();
         orders = new ArrayList<>();
+    }
+
+    public static InputData getInstance() {
+        return instance;
     }
 
     public void addTheater(Theater theater) { theaters.add(theater); }

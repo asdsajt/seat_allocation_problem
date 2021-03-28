@@ -17,7 +17,7 @@ public class Room {
     @Getter private Seat[][] rows;
 
     // Only for importing with valid IDs
-    public Room(String id, String theaterId, String name, int columnNum, int rowNum) {
+    public Room(String id, String theaterId, String name, int rowNum, int columnNum) {
         this.id = id;
         this.theaterId = theaterId;
         this.name = name;
@@ -27,12 +27,12 @@ public class Room {
     }
 
     // Use this to instantiate a new Room
-    public Room(String theaterId, String name, int columnNum, int rowNum) {
-        this(IdGenerator.generateId(DataType.Room), theaterId, name, columnNum, rowNum);
+    public Room(String theaterId, String name, int rowNum, int columnNum) {
+        this(IdGenerator.generateId(DataType.Room), theaterId, name, rowNum, columnNum);
     }
 
-    public Room(String name, int columnNum, int rowNum) {
-        this("TH-Unknown", name, columnNum, rowNum);
+    public Room(String name, int rowNum, int columnNum) {
+        this("TH-Unknown", name, rowNum, columnNum);
     }
 
     public Seat[] getRow(int rowNum) {

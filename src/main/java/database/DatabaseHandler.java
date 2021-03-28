@@ -30,7 +30,7 @@ public class DatabaseHandler {
     private MongoClientURI uri = new MongoClientURI("mongodb+srv://dev_andras:VaYghVLpk9claZvL@cluster0.w1odn.mongodb.net/Theater?retryWrites=true&w=majority");
 
     public Room testRoom(){
-        Room room = new Room("RO-123", "TH-1", 5, 4);
+        Room room = new Room("RO-123", "TH-1", 4, 5);
 
         room.getRows()[0][2].setStatus(SeatStatus.Taken); room.getRows()[0][4].setStatus(SeatStatus.Taken);
         room.getRows()[1][2].setStatus(SeatStatus.Taken); room.getRows()[1][4].setStatus(SeatStatus.Taken);
@@ -249,7 +249,7 @@ public class DatabaseHandler {
                     String theaterId =  jo.getJSONObject(element).getString("theater_id");
                     int rowNum =  Integer.parseInt(jo.getJSONObject(element).getString("row_num"));
                     int columnNum =  Integer.parseInt(jo.getJSONObject(element).getString("column_num"));
-                    Room room = new Room(roomId, theaterId, columnNum, rowNum);
+                    Room room = new Room(roomId, theaterId, rowNum, columnNum);
 
                     for (String rowElement: jo.getJSONObject(element).getJSONObject("rows").keySet()) {
                         String[] rowSplit = jo.getJSONObject(element).getJSONObject("rows").getString(rowElement).split(";");

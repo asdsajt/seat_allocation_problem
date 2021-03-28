@@ -4,6 +4,10 @@ import globalControls.AlertMaker;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import javafx.stage.WindowEvent;
+import model.Room;
+import model.Theater;
+import model.utils.interfaces.IStorage;
+import model.utils.temp.InputData;
 
 public class TheatherAdderController {
     private final TheatherAdderView view;
@@ -26,6 +30,7 @@ public class TheatherAdderController {
         } else {
             String theaterName = view.getTheaterNameTextField().getText();
             //todo: színház hozzáadása az adatbázishoz
+            Theater storedTheater = storeNewTheater(theaterName, InputData.getInstance());
             if (view.getRoomNameTextField().getText().equals("")) {
                 view.getAddButton().getScene().getWindow().fireEvent(new WindowEvent(view.getAddButton().getScene().getWindow(), WindowEvent.WINDOW_CLOSE_REQUEST));
             } else {
@@ -39,7 +44,7 @@ public class TheatherAdderController {
                     int colNumber = Integer.parseInt(view.getColumnNumberTextField().getText());
 
                     //todo: új terem hozzáadása, az előzőleg hozzáadott színházhoz
-
+                    storeNewRoom(storedTheater, roomName, rowNumber, colNumber, InputData.getInstance());
                     view.getAddButton().getScene().getWindow().fireEvent(new WindowEvent(view.getAddButton().getScene().getWindow(), WindowEvent.WINDOW_CLOSE_REQUEST));
                 }
             }
@@ -48,4 +53,17 @@ public class TheatherAdderController {
 
 
     }
+
+    private Theater storeNewTheater(String theaterName, IStorage storage) {
+        Theater newTheater = new Theater(theaterName);
+        storage.addTheater(newTheater);
+        return newTheater;
+    }
+
+    private Room storeNewRoom(Theater theater, String name, int rowNum, int colNum,  IStorage storage) {
+        Room newRoom = new Room(theater.getId(), name, rowNum, colNum);
+        storage.addRoom(newRoom);
+        return newRoom;
+    }
+
 }
