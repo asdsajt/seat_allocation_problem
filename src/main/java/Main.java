@@ -1,5 +1,4 @@
 import controller.Controller;
-import database.DatabaseHandler;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import model.Theater;
@@ -26,10 +25,6 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
-        //launch();
-        DatabaseHandler dbhandler = new DatabaseHandler();
-        //Theater[] theaters = dbhandler.getAllTheater();
-        dbhandler.updateTheater(new Theater("TH-1", "szinhaz 1"));
-        System.out.println();
+        launch();
     }
 }
