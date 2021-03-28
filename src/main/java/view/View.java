@@ -29,7 +29,7 @@ public class View extends Stage {
     private TextArea groupDefinitionTextArea;
 
     @Getter
-    private ComboBox<String> theatherComboBox, roomComboBox, groupNumberComboBox, solveMethodComboBox;
+    private ComboBox<String> theaterComboBox, roomComboBox, groupNumberComboBox, solveMethodComboBox;
 
     @Getter
     private final CheckBox disableSeatsCheckBox;
@@ -52,7 +52,7 @@ public class View extends Stage {
 
         groupDefinitionTextArea = new TextArea();
 
-        theatherComboBox = new ComboBox<>();
+        theaterComboBox = new ComboBox<>();
         roomComboBox = new ComboBox<>();
         groupNumberComboBox = new ComboBox<>();
         solveMethodComboBox = new ComboBox<>();
@@ -114,7 +114,7 @@ public class View extends Stage {
         label.setStyle("-fx-font-size: 18px; -fx-font-weight: bold");
         label.setPadding(new Insets(0, 10, 0, 0));
         rightSideGridPane.add(label, 0, 0, 2, 1);
-        rightSideGridPane.add(setComboBoxFor2ColsProperties(theatherComboBox), 0, 1, 2, 1);
+        rightSideGridPane.add(setComboBoxFor2ColsProperties(theaterComboBox), 0, 1, 2, 1);
         rightSideGridPane.add(setNormalTextProperties("Színház hozzáadás"), 0, 2);
         rightSideGridPane.add(setButtonProperties(addNewTheaterButton), 1, 2);
 

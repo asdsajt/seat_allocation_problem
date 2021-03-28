@@ -8,7 +8,6 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import javafx.stage.Modality;
-import model.Room;
 import org.controlsfx.control.spreadsheet.GridBase;
 import org.controlsfx.control.spreadsheet.SpreadsheetCell;
 import org.controlsfx.control.spreadsheet.SpreadsheetCellType;
@@ -19,6 +18,7 @@ import popup_window.theater_adder.TheatherAdderView;
 import solver.greedy.GreedySolver;
 import view.View;
 
+import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class Controller {
@@ -46,8 +46,11 @@ public class Controller {
         view.getGroupNumberComboBox().setValue(ComboBoxStrings.GROUP_SELECTOR_STRINGS.get(0));
         view.getSolveMethodComboBox().setItems(ComboBoxStrings.SOLVER_METHOD_STRINGS);
         view.getSolveMethodComboBox().setValue("Válasszon...");
-        view.getTheatherComboBox().setValue("Válasszon színházat...");
+        view.getTheaterComboBox().setValue("Válasszon színházat...");
         view.getRoomComboBox().setValue("Válasszon termet...");
+        ArrayList<String> theaterNames = new ArrayList<>();
+        //todo: itt le kell kérni a db-ben lévő színházak neveit és eltárolni a theaterNames-be
+        view.getTheaterComboBox().setItems(FXCollections.observableList(theaterNames));
     }
 
     /**
@@ -57,9 +60,24 @@ public class Controller {
         view.getRoomSpreadSheetView().getSelectionModel().getSelectedCells().addListener(spreadSheetListeners.getAllocationSelectorListener());
         view.getDisableSeatsCheckBox().selectedProperty().addListener(this::disableSeatsChanged);
         view.getGroupNumberComboBox().setOnAction(this::groupNumberChanged);
+        view.getTheaterComboBox().setOnAction(this::fillRoomComboBoxData);
+        view.getRoomComboBox().setOnAction(this::refreshRoomData);
         view.getSolveButton().setOnAction(this::solverPressed);
         view.getAddNewTheaterButton().setOnAction(this::addTheater);
         view.getAddNewRoomButton().setOnAction(this::addRoom);
+    }
+
+    private void refreshRoomData(ActionEvent actionEvent) {
+        String roomName = view.getRoomComboBox().getValue();
+        if(!roomName.equals("Válasszon termet...")) {
+            //todo: nekem kellene a roomName alapján ide a Room
+        }
+    }
+
+    private void fillRoomComboBoxData(ActionEvent actionEvent) {
+        ArrayList<String> roomNames = new ArrayList<>();
+        //todo: itt le kell kérni a db-ben lévő színházhoz tartozó termek neveit és eltárolni a roomNames-be
+        view.getRoomComboBox().setItems(FXCollections.observableList(roomNames));
     }
 
     private void addTheater(ActionEvent actionEvent) {
