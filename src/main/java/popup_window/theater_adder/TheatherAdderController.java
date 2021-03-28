@@ -4,6 +4,9 @@ import globalControls.AlertMaker;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import javafx.stage.WindowEvent;
+import model.Theater;
+import model.utils.interfaces.IStorage;
+import model.utils.temp.InputData;
 
 public class TheatherAdderController {
     private final TheatherAdderView view;
@@ -26,6 +29,7 @@ public class TheatherAdderController {
         } else {
             String theaterName = view.getTheaterNameTextField().getText();
             //todo: színház hozzáadása az adatbázishoz
+            storeNewTheater(theaterName, InputData.getInstance());
             if (view.getRoomNameTextField().getText().equals("")) {
                 view.getAddButton().getScene().getWindow().fireEvent(new WindowEvent(view.getAddButton().getScene().getWindow(), WindowEvent.WINDOW_CLOSE_REQUEST));
             } else {
@@ -47,5 +51,10 @@ public class TheatherAdderController {
         }
 
 
+    }
+
+    private void storeNewTheater(String theaterName, IStorage storage) {
+        Theater newTheater = new Theater(theaterName);
+        storage.addTheater(newTheater);
     }
 }

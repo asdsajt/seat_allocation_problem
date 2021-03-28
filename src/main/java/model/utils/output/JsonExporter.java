@@ -3,6 +3,7 @@ package model.utils.output;
 import model.Room;
 import model.Seat;
 import model.Theater;
+import model.utils.interfaces.IStorage;
 import model.utils.temp.InputData;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -12,15 +13,21 @@ import java.io.IOException;
 
 public class JsonExporter extends Exporter{
 
+    private final IStorage storage;
+
+    public JsonExporter(IStorage storage) {
+        this.storage = storage;
+    }
+
     @Override
-    public void exportFile(String filePath, InputData storage) {
+    public void exportFile(String filePath) {
         JSONObject fullJson = new JSONObject();
-        fullJson.put("theaters", formatTheaters(storage));
-        fullJson.put("rooms", formatRooms(storage));
+        fullJson.put("theaters", formatTheaters());
+        fullJson.put("rooms", formatRooms());
         writeJson(fullJson, filePath);
     }
 
-    private JSONArray formatTheaters(InputData storage) {
+    private JSONArray formatTheaters() {
         JSONArray theaterList = new JSONArray();
         for (Theater theater : storage.getTheaters()) {
             JSONObject theaterDetails = new JSONObject();
@@ -31,7 +38,7 @@ public class JsonExporter extends Exporter{
         return theaterList;
     }
 
-    private JSONArray formatRooms(InputData storage) {
+    private JSONArray formatRooms() {
         JSONArray roomList = new JSONArray();
         for (Room room : storage.getRooms()) {
             JSONObject roomDetails = new JSONObject();

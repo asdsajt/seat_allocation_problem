@@ -5,6 +5,7 @@ import model.Room;
 import model.Seat;
 import model.Theater;
 import model.utils.enums.SeatStatus;
+import model.utils.interfaces.IStorage;
 import model.utils.temp.InputData;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -17,17 +18,17 @@ import java.io.IOException;
 
 public class JsonImporter extends Importer{
 
-    private InputData tempInputStorage;
+    private final IStorage storage;
+
+    public JsonImporter(IStorage storage) {
+        this.storage = storage;
+    }
 
     @Override
-    public final void importFile(String filePath, InputData storage) {
-        tempInputStorage = new InputData();
+    public final void importFile(String filePath) {
         JSONObject content = readJson(filePath);
         if (content == null) { return; }
         parseData(content);
-        storage.addRooms(tempInputStorage.getRooms());
-        storage.addTheaters(tempInputStorage.getTheaters());
-        storage.addOrders(tempInputStorage.getOrders());
     }
 
     private JSONObject readJson(String filePath) {
@@ -76,7 +77,7 @@ public class JsonImporter extends Importer{
             }
             Room parsedRoom = new Room(id, theaterId, name, columnNum, rowNum);
             parseSeats((JSONObject) room.get("rows"), parsedRoom);
-            tempInputStorage.addRoom(parsedRoom);
+            storage.addRoom(parsedRoom);
         }
     }
 
@@ -124,10 +125,10 @@ public class JsonImporter extends Importer{
      */
     private void storeOrder(String orderId, String roomId) {
         if (orderId == null) { return; }
-        for (Order order : tempInputStorage.getOrders()) {
+        for (Order order : storage.getOrders()) {
             if (order.getId().equals(orderId)) { return; }
         }
-        tempInputStorage.addOrder(new Order(orderId, roomId));
+        storage.addOrder(new Order(orderId, roomId));
     }
 
     /**
@@ -139,7 +140,7 @@ public class JsonImporter extends Importer{
             JSONObject theater = (JSONObject) theaterObject;
             String id = parseString(theater.get("id"));
             String name = parseString(theater.get("name"));
-            tempInputStorage.addTheater(new Theater(id, name));
+            storage.addTheater(new Theater(id, name));
         }
     }
 
