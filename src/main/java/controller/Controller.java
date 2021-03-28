@@ -25,16 +25,21 @@ public class Controller {
         spreadSheetListeners = new SpreadSheetClickListeners(this.view.getRoomSpreadSheetView(), this.view.getRoomSpreadSheetView().getScene().getWindow());
 
         initComboBoxes();
-        configureSpreadSheet(Integer.parseInt(view.getRowNumberTextField().getText()),
-                Integer.parseInt(view.getColumnNumberTextField().getText()));
+        configureSpreadSheet(Integer.parseInt(view.getRowNumberLabel().getText()),
+                Integer.parseInt(view.getColumnNumberLabel().getText()));
         createListeners();
     }
 
+    /**
+     * ComboBox értékekek inicializálása
+     */
     private void initComboBoxes() {
         view.getGroupNumberComboBox().setItems(ComboBoxStrings.GROUP_SELECTOR_STRINGS);
         view.getGroupNumberComboBox().setValue(ComboBoxStrings.GROUP_SELECTOR_STRINGS.get(0));
         view.getSolveMethodComboBox().setItems(ComboBoxStrings.SOLVER_METHOD_STRINGS);
         view.getSolveMethodComboBox().setValue("Válasszon...");
+        view.getTheatherComboBox().setValue("Válasszon színházat...");
+        view.getRoomComboBox().setValue("Válasszon termet...");
     }
 
     /**
@@ -45,29 +50,11 @@ public class Controller {
         view.getDisableSeatsCheckBox().selectedProperty().addListener(this::disableSeatsChanged);
         view.getGroupNumberComboBox().setOnAction(this::groupNumberChanged);
         view.getSolveButton().setOnAction(this::solverPressed);
-        view.getRowNumberTextField().textProperty().addListener((observable, oldValue, newValue) -> {
-            try {
-                if (!newValue.matches("\\d*")) {
-                    view.getRowNumberTextField().setText(newValue.replaceAll("[^\\d]", ""));
-                }
-                if (!newValue.replaceAll("[^\\d]", "").equals(""))
-                    configureSpreadSheet(Integer.parseInt(newValue.replaceAll("[^\\d]", "")), Integer.parseInt(view.getColumnNumberTextField().getText()));
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        });
+        view.getAddNewRoomButton().setOnAction(this::saveRoom);
+    }
 
-        view.getColumnNumberTextField().textProperty().addListener((observable, oldValue, newValue) -> {
-            try {
-                if (!newValue.matches("\\d*")) {
-                    view.getColumnNumberTextField().setText(newValue.replaceAll("[^\\d]", ""));
-                }
-                if (!newValue.replaceAll("[^\\d]", "").equals(""))
-                    configureSpreadSheet(Integer.parseInt(view.getRowNumberTextField().getText()), Integer.parseInt(newValue.replaceAll("[^\\d]", "")));
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        });
+    private void saveRoom(ActionEvent actionEvent) {
+
     }
 
     private void solverPressed(ActionEvent actionEvent) {
@@ -140,8 +127,8 @@ public class Controller {
          * Automatikus méretezés, hogy ne kelljen görgetni
          */
         AtomicReference<Double> maxSize = new AtomicReference<>();
-        maxSize.set(66.0);
-        while ((rowNumber >= columnNumber ? rowNumber : columnNumber) * maxSize.get() > 660 && maxSize.get() != 35) {
+        maxSize.set(100.0);
+        while ((rowNumber >= columnNumber ? rowNumber : columnNumber) * maxSize.get() > 760 && maxSize.get() != 35) {
             maxSize.set(maxSize.get() - 1);
         }
 

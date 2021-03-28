@@ -20,16 +20,16 @@ public class View extends Stage {
     private SpreadsheetView roomSpreadSheetView;
 
     @Getter
-    private Button importRoomFromDBButon, saveRoomToDBButton, groupDefinitionImportButton, groupDefinitionExportButton, solveButton;
+    private Button addNewTheaterButton, addNewRoomButton, saveCurrentRoomButton, groupDefinitionImportButton, groupDefinitionExportButton, solveButton;
 
     @Getter
-    private TextField rowNumberTextField, columnNumberTextField;
+    private Label rowNumberLabel, columnNumberLabel;
 
     @Getter
     private TextArea groupDefinitionTextArea;
 
     @Getter
-    private ComboBox<String> groupNumberComboBox, solveMethodComboBox;
+    private ComboBox<String> theatherComboBox, roomComboBox, groupNumberComboBox, solveMethodComboBox;
 
     @Getter
     private final CheckBox disableSeatsCheckBox;
@@ -38,19 +38,22 @@ public class View extends Stage {
     public View() {
         roomSpreadSheetView = new SpreadsheetView();
 
-        importRoomFromDBButon = new Button("Import");
-        saveRoomToDBButton = new Button("Mentés");
+        addNewTheaterButton = new Button("Hozzáadás");
+        addNewRoomButton = new Button("Hozzáadás");
+        saveCurrentRoomButton = new Button("Mentés");
         groupDefinitionImportButton = new Button();
         groupDefinitionImportButton.setGraphic(twoLineVBox("Csoport definíció", "importálás"));
         groupDefinitionExportButton = new Button();
         groupDefinitionExportButton.setGraphic(twoLineVBox("Csoport definíció", "exportálás"));
         solveButton = new Button("Megoldás");
 
-        rowNumberTextField = new TextField("10");
-        columnNumberTextField = new TextField("10");
+        rowNumberLabel = new Label("15");
+        columnNumberLabel = new Label("15");
 
         groupDefinitionTextArea = new TextArea();
 
+        theatherComboBox = new ComboBox<>();
+        roomComboBox = new ComboBox<>();
         groupNumberComboBox = new ComboBox<>();
         solveMethodComboBox = new ComboBox<>();
 
@@ -93,12 +96,12 @@ public class View extends Stage {
         roomSpreadSheetView.setContextMenu(null);
         roomSpreadSheetView.setShowColumnHeader(false);
         roomSpreadSheetView.setShowRowHeader(false);
-        roomSpreadSheetView.setMinWidth(700);
-        roomSpreadSheetView.setMinHeight(700);
-        roomSpreadSheetView.setMaxWidth(700);
-        roomSpreadSheetView.setMaxHeight(700);
+        roomSpreadSheetView.setMinWidth(800);
+        roomSpreadSheetView.setMinHeight(800);
+        roomSpreadSheetView.setMaxWidth(800);
+        roomSpreadSheetView.setMaxHeight(800);
         roomSpreadSheetView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-        roomSpreadSheetView.setPadding(new Insets(10));
+        roomSpreadSheetView.setPadding(new Insets(0,10,10,10));
 
         mainBorderPane.setCenter(roomSpreadSheetView);
     }
@@ -107,32 +110,38 @@ public class View extends Stage {
         GridPane rightSideGridPane = new GridPane();
         rightSideGridPane.setPadding(new Insets(0, 0, 10, 0));
 
-        Label label = new Label("Terem adatai");
+        Label label = new Label("Színház adatai");
         label.setStyle("-fx-font-size: 18px; -fx-font-weight: bold");
         label.setPadding(new Insets(0, 10, 0, 0));
         rightSideGridPane.add(label, 0, 0, 2, 1);
-        rightSideGridPane.add(setNormalTextProperties("Sorok száma"), 0, 1);
-        rightSideGridPane.add(setNormalTextProperties("Oszlopok száma"), 0, 2);
-        rightSideGridPane.add(setNormalTextProperties("Székek eltűntetése"), 0, 3);
-        rightSideGridPane.add(setNormalTextProperties("Előző terem importálása"), 0, 4);
-        rightSideGridPane.add(setNormalTextProperties("Jelenlegi terem mentése"), 0, 5);
-        rightSideGridPane.add(setNumberTextFieldProperties(rowNumberTextField), 1, 1);
-        rightSideGridPane.add(setNumberTextFieldProperties(columnNumberTextField), 1, 2);
-        rightSideGridPane.add(disableSeatsCheckBox, 1, 3);
-        rightSideGridPane.add(setButtonProperties(importRoomFromDBButon), 1, 4);
-        rightSideGridPane.add(setButtonProperties(saveRoomToDBButton), 1, 5);
+        rightSideGridPane.add(setComboBoxFor2ColsProperties(theatherComboBox), 0, 1, 2, 1);
+        rightSideGridPane.add(setNormalTextProperties("Színház hozzáadás"), 0, 2);
+        rightSideGridPane.add(setButtonProperties(addNewTheaterButton), 1, 2);
 
-        rightSideGridPane.add(setH2Properties("Kézi megoldó"), 0, 6, 2, 1);
-        rightSideGridPane.add(setNormalTextProperties("Aktuális csoport létszám"), 0, 7);
-        rightSideGridPane.add(setComboBoxProperties(groupNumberComboBox), 1, 7);
+        rightSideGridPane.add(setH2Properties("Terem adatai"), 0, 3, 2, 1);
+        rightSideGridPane.add(setComboBoxFor2ColsProperties(roomComboBox), 0, 4, 2, 1);
+        rightSideGridPane.add(setNormalTextProperties("Sorok száma"), 0, 5);
+        rightSideGridPane.add(setNumberLabelProperties(rowNumberLabel), 1, 5);
+        rightSideGridPane.add(setNormalTextProperties("Oszlopok száma"), 0, 6);
+        rightSideGridPane.add(setNumberLabelProperties(columnNumberLabel), 1, 6);
+        rightSideGridPane.add(setNormalTextProperties("Terem hozzáadás"), 0, 7);
+        rightSideGridPane.add(setButtonProperties(addNewRoomButton), 1, 7);
+        rightSideGridPane.add(setNormalTextProperties("Székek eltűntetése"), 0, 8);
+        rightSideGridPane.add(disableSeatsCheckBox, 1, 8);
+        rightSideGridPane.add(setNormalTextProperties("Jelenlegi terem mentése"), 0, 9);
+        rightSideGridPane.add(setButtonProperties(saveCurrentRoomButton), 1, 9);
 
-        rightSideGridPane.add(setH2Properties("Gépi megoldó"), 0, 8, 2, 1);
-        rightSideGridPane.add(setNormalTextProperties("Csoportok meghatározása\n(csoportok elválasztása ;-vel)"), 0, 9, 2, 1);
-        rightSideGridPane.add(setTextAreaProperties(groupDefinitionTextArea), 0, 10, 2, 1);
-        rightSideGridPane.add(buttonPositioner(setButtonProperties(groupDefinitionImportButton), setButtonProperties(groupDefinitionExportButton)), 0, 11, 2, 1);
-        rightSideGridPane.add(setNormalTextProperties("Megoldó kiválasztása"), 0, 12);
-        rightSideGridPane.add(setComboBoxProperties(solveMethodComboBox), 1, 12);
-        rightSideGridPane.add(addNoteToHbox(setButtonProperties(solveButton)), 0, 13);
+        rightSideGridPane.add(setH2Properties("Kézi megoldó"), 0, 10, 2, 1);
+        rightSideGridPane.add(setNormalTextProperties("Aktuális csoport létszám"), 0, 11);
+        rightSideGridPane.add(setComboBoxProperties(groupNumberComboBox), 1, 11);
+
+        rightSideGridPane.add(setH2Properties("Gépi megoldó"), 0, 12, 2, 1);
+        rightSideGridPane.add(setNormalTextProperties("Csoportok meghatározása\n(csoportok elválasztása ;-vel)"), 0, 13, 2, 1);
+        rightSideGridPane.add(setTextAreaProperties(groupDefinitionTextArea), 0, 14, 2, 1);
+        rightSideGridPane.add(buttonPositioner(setButtonProperties(groupDefinitionImportButton), setButtonProperties(groupDefinitionExportButton)), 0, 15, 2, 1);
+        rightSideGridPane.add(setNormalTextProperties("Megoldó kiválasztása"), 0, 16);
+        rightSideGridPane.add(setComboBoxProperties(solveMethodComboBox), 1, 16);
+        rightSideGridPane.add(addNoteToHbox(setButtonProperties(solveButton)), 0, 17);
 
         mainBorderPane.setRight(rightSideGridPane);
     }
@@ -159,9 +168,19 @@ public class View extends Stage {
         return hBox;
     }
 
+    private Node setComboBoxFor2ColsProperties(ComboBox comboBox) {
+        comboBox.setPrefWidth(280);
+        comboBox.setStyle("-fx-font-size: 13px");
+        HBox hBox = new HBox(comboBox);
+        hBox.setPrefWidth(300);
+        hBox.setAlignment(Pos.CENTER);
+        hBox.setPadding(new Insets(5, 0, 5, 0));
+        return addNoteToHbox(hBox);
+    }
+
     private Node setTextAreaProperties(TextArea textArea) {
         textArea.setMaxWidth(300);
-        textArea.setMaxHeight(170);
+        textArea.setMaxHeight(90);
         textArea.setStyle("-fx-font-size: 14px");
 
         return addNoteToHbox(textArea);
@@ -175,10 +194,9 @@ public class View extends Stage {
         return addNoteToHbox(comboBox);
     }
 
-    private TextField setNumberTextFieldProperties(TextField textField) {
-        textField.setMaxWidth(100);
-        textField.setStyle("-fx-font-size: 14px");
-        return textField;
+    private Label setNumberLabelProperties(Label label) {
+        label.setStyle("-fx-font-size: 14px");
+        return label;
     }
 
     private Label setH2Properties(String text) {
