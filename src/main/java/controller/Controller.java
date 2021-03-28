@@ -1,5 +1,6 @@
 package controller;
 
+import database.DatabaseHandler;
 import globalControls.AlertMaker;
 import globalControls.CellStyles;
 import javafx.beans.Observable;
@@ -8,6 +9,8 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import javafx.stage.Modality;
+import model.Room;
+import model.Theater;
 import org.controlsfx.control.spreadsheet.GridBase;
 import org.controlsfx.control.spreadsheet.SpreadsheetCell;
 import org.controlsfx.control.spreadsheet.SpreadsheetCellType;
@@ -49,7 +52,13 @@ public class Controller {
         view.getTheaterComboBox().setValue("Válasszon színházat...");
         view.getRoomComboBox().setValue("Válasszon termet...");
         ArrayList<String> theaterNames = new ArrayList<>();
-        //todo: itt le kell kérni a db-ben lévő színházak neveit és eltárolni a theaterNames-be
+
+        DatabaseHandler dbHandler = new DatabaseHandler();
+        Theater[] theaters = dbHandler.getAllTheater();
+        for (Theater theater : theaters) {
+            theaterNames.add(theater.getName());
+        }
+
         view.getTheaterComboBox().setItems(FXCollections.observableList(theaterNames));
     }
 
@@ -69,14 +78,52 @@ public class Controller {
 
     private void refreshRoomData(ActionEvent actionEvent) {
         String roomName = view.getRoomComboBox().getValue();
-        if(!roomName.equals("Válasszon termet...")) {
-            //todo: nekem kellene a roomName alapján ide a Room
+        String theaterName = view.getTheaterComboBox().getValue();
+        if(!roomName.equals("Válasszon termet...") || !theaterName.equals("Válasszon színházat...")) {
+
+            String theaterId = getTheaterIdByName(theaterName);
+            Room resultRoom;
+
+            DatabaseHandler dbHandler = new DatabaseHandler();
+            Room[] rooms = dbHandler.getRoomsByTheaterId(theaterId);
+            for (Room room : rooms) {
+                if (room.getName().equals(roomName)){
+                    resultRoom = room;
+                }
+            }
+
+            //Kellett a színház neve, mert a termek neve lehet azonos.
+            //TODO: resultRoom-ban van a szoba
         }
+    }
+
+    private String getTheaterIdByName(String theaterName){
+        DatabaseHandler dbHandler = new DatabaseHandler();
+        Theater[] theaters = dbHandler.getAllTheater();
+        for (Theater theater : theaters) {
+            if (theater.getName().equals(theaterName)){
+                return theater.getId();
+            }
+        }
+        return null;
     }
 
     private void fillRoomComboBoxData(ActionEvent actionEvent) {
         ArrayList<String> roomNames = new ArrayList<>();
-        //todo: itt le kell kérni a db-ben lévő színházhoz tartozó termek neveit és eltárolni a roomNames-be
+
+        String theaterName = view.getTheaterComboBox().getValue();
+        String theaterId = "";
+
+        if(!theaterName.equals("Válasszon színházat...")) {
+            theaterId = getTheaterIdByName(theaterName);
+
+            DatabaseHandler dbHandler = new DatabaseHandler();
+            Room[] rooms = dbHandler.getRoomsByTheaterId(theaterId);
+            for (Room room : rooms) {
+                roomNames.add(room.getName());
+            }
+        }
+
         view.getRoomComboBox().setItems(FXCollections.observableList(roomNames));
     }
 

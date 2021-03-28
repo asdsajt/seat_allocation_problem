@@ -1,5 +1,6 @@
 package popup_window.theater_adder;
 
+import database.DatabaseHandler;
 import globalControls.AlertMaker;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
@@ -29,7 +30,11 @@ public class TheatherAdderController {
             AlertMaker.make(Alert.AlertType.ERROR, view.getAddButton().getScene().getWindow(), "Színház hiba", "Nem töltötte ki a színház nevét!");
         } else {
             String theaterName = view.getTheaterNameTextField().getText();
-            //todo: színház hozzáadása az adatbázishoz
+
+            Theater newTheater = new Theater(theaterName);
+            DatabaseHandler dbHandler = new DatabaseHandler();
+            dbHandler.saveNewTheater(newTheater);
+
             Theater storedTheater = storeNewTheater(theaterName, InputData.getInstance());
             if (view.getRoomNameTextField().getText().equals("")) {
                 view.getAddButton().getScene().getWindow().fireEvent(new WindowEvent(view.getAddButton().getScene().getWindow(), WindowEvent.WINDOW_CLOSE_REQUEST));
@@ -43,7 +48,9 @@ public class TheatherAdderController {
                     int rowNumber = Integer.parseInt(view.getRowNumberTextField().getText());
                     int colNumber = Integer.parseInt(view.getColumnNumberTextField().getText());
 
-                    //todo: új terem hozzáadása, az előzőleg hozzáadott színházhoz
+                    Room newRoom = new Room(newTheater.getId(), roomName, rowNumber, colNumber);
+                    dbHandler.saveNewRoom(newRoom);
+
                     storeNewRoom(storedTheater, roomName, rowNumber, colNumber, InputData.getInstance());
                     view.getAddButton().getScene().getWindow().fireEvent(new WindowEvent(view.getAddButton().getScene().getWindow(), WindowEvent.WINDOW_CLOSE_REQUEST));
                 }

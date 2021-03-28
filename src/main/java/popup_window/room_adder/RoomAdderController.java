@@ -1,10 +1,13 @@
 package popup_window.room_adder;
 
+import database.DatabaseHandler;
 import globalControls.AlertMaker;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import javafx.stage.WindowEvent;
+import model.Room;
+import model.Theater;
 
 import java.util.ArrayList;
 
@@ -23,7 +26,11 @@ public class RoomAdderController {
         view.getTheaterComboBox().setValue("Válasszon színházat...");
         ArrayList<String> theaterNames = new ArrayList<>();
 
-        //todo: itt le kell kérni a db-ben lévő színházak neveit és eltárolni a theaterNames-be
+        DatabaseHandler dbHandler = new DatabaseHandler();
+        Theater[] theaters = dbHandler.getAllTheater();
+        for (Theater theater : theaters) {
+            theaterNames.add(theater.getName());
+        }
 
         view.getTheaterComboBox().setItems(FXCollections.observableList(theaterNames));
     }
@@ -47,8 +54,17 @@ public class RoomAdderController {
             int rowNumber = Integer.parseInt(view.getRowNumberTextField().getText());
             int colNumber = Integer.parseInt(view.getColumnNumberTextField().getText());
 
-            //todo: itt a színház név alapján az id-t le kell kérni még
-            //todo: új terem hozzáadása a kiválasztott színházhoz
+            String theatherId = "";
+            DatabaseHandler dbHandler = new DatabaseHandler();
+            Theater[] theaters = dbHandler.getAllTheater();
+            for (Theater theater : theaters) {
+                if (theater.getName().equals(theatherName)){
+                    theatherId = theater.getId();
+                }
+            }
+
+            Room room = new Room(theatherId, roomName, rowNumber, colNumber);
+            dbHandler.saveNewRoom(room);
 
             view.getAddButton().getScene().getWindow().fireEvent(new WindowEvent(view.getAddButton().getScene().getWindow(), WindowEvent.WINDOW_CLOSE_REQUEST));
         }
