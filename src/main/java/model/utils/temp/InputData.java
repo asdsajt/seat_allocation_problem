@@ -6,6 +6,8 @@ import model.Room;
 import model.Theater;
 
 import java.util.ArrayList;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class InputData {    // TODO: Should be replaced by the data source of the GUI-Controller
 
@@ -21,21 +23,24 @@ public class InputData {    // TODO: Should be replaced by the data source of th
 
     public void addTheater(Theater theater) { theaters.add(theater); }
 
-    public void setTheaters(ArrayList<Theater> theaters) {
-        this.theaters = theaters;
+    public void addTheaters(ArrayList<Theater> theaters) {
+        this.theaters = (ArrayList<Theater>) Stream.concat(this.theaters.stream(), theaters.stream())
+                .collect(Collectors.toList());
     }
 
     public void addRoom(Room room) {
         rooms.add(room);
     }
 
-    public void setRooms(ArrayList<Room> rooms) {
-        this.rooms = rooms;
+    public void addRooms(ArrayList<Room> rooms) {
+        this.rooms = (ArrayList<Room>) Stream.concat(this.rooms.stream(), rooms.stream())
+                                                        .collect(Collectors.toList());
     }
 
     public void addOrder(Order order) { orders.add(order); }
 
-    public void setOrders(ArrayList<Order> orders) {
-        this.orders = orders;
+    public void addOrders(ArrayList<Order> orders) {
+        this.orders = (ArrayList<Order>) Stream.concat(this.orders.stream(), orders.stream())
+                .collect(Collectors.toList());
     }
 }

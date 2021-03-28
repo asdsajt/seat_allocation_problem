@@ -25,9 +25,9 @@ public class JsonImporter extends Importer{
         JSONObject content = readJson(filePath);
         if (content == null) { return; }
         parseData(content);
-        storage.setRooms(tempInputStorage.getRooms());
-        storage.setTheaters(tempInputStorage.getTheaters());
-        storage.setOrders(tempInputStorage.getOrders());
+        storage.addRooms(tempInputStorage.getRooms());
+        storage.addTheaters(tempInputStorage.getTheaters());
+        storage.addOrders(tempInputStorage.getOrders());
     }
 
     private JSONObject readJson(String filePath) {
