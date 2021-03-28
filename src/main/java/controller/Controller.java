@@ -5,9 +5,12 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
+import javafx.stage.Modality;
 import org.controlsfx.control.spreadsheet.GridBase;
 import org.controlsfx.control.spreadsheet.SpreadsheetCell;
 import org.controlsfx.control.spreadsheet.SpreadsheetCellType;
+import popup_window.theater_adder.TheatherAdderController;
+import popup_window.theater_adder.TheatherAdderView;
 import solver.greedy.GreedySolver;
 import view.View;
 
@@ -50,10 +53,27 @@ public class Controller {
         view.getDisableSeatsCheckBox().selectedProperty().addListener(this::disableSeatsChanged);
         view.getGroupNumberComboBox().setOnAction(this::groupNumberChanged);
         view.getSolveButton().setOnAction(this::solverPressed);
-        view.getAddNewRoomButton().setOnAction(this::saveRoom);
+        view.getAddNewTheaterButton().setOnAction(this::addTheater);
+        view.getAddNewRoomButton().setOnAction(this::addRoom);
     }
 
-    private void saveRoom(ActionEvent actionEvent) {
+    private void addTheater(ActionEvent actionEvent) {
+        TheatherAdderView theatherAdderView = new TheatherAdderView();
+        theatherAdderView.initOwner(view.getAddNewTheaterButton().getScene().getWindow());
+        theatherAdderView.initModality(Modality.APPLICATION_MODAL);
+        theatherAdderView.setOnCloseRequest(event -> {
+            try {
+                theatherAdderView.close();
+                System.out.println("ablak bezár");
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
+        new TheatherAdderController(theatherAdderView);
+    }
+
+
+    private void addRoom(ActionEvent actionEvent) {
 
     }
 
