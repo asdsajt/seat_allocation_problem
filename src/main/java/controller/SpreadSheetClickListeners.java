@@ -1,5 +1,7 @@
 package controller;
 
+import globalControls.AlertMaker;
+import globalControls.CellStyles;
 import javafx.beans.InvalidationListener;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TablePosition;
@@ -17,6 +19,14 @@ public class SpreadSheetClickListeners {
     @Setter
     private int groupNumber;
 
+    /**
+     * Elkészíti a kétesemény figyelőt a spreadsheethez.
+     *  - cellDisableListener: az üres cellákat kattintás után törli, és a törölt cellákat kattintás után feloldja és üressé teszi
+     *  - allocationSelectorListener: megnézi, hogy az adott helyre lehet-e csoportot berakni
+     *     - először megvizsgálja, hogy a közvetlen a kiválasztott cella mellett lévő cellákat, hogy el lehet-e helyezni a csoport
+     * @param spreadsheetView
+     * @param window
+     */
     public SpreadSheetClickListeners(SpreadsheetView spreadsheetView, Window window) {
         groupNumber = 1;
 
@@ -135,24 +145,16 @@ public class SpreadSheetClickListeners {
     }
 
     private void alertMaker(Window window, String msg) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setHeaderText(null);
-        alert.initOwner(window);
-
         switch (msg) {
             case "KET_CSOPORT_KOZOTT":
             case "HELY_KIHAGYAS":
-                alert.setContentText("Két csoport között 1 üres helyet kell hagyni, az egészségügyi szabályok miatt!");
-                alert.setTitle("Hely kihagyás hiba");
+                AlertMaker.make(Alert.AlertType.ERROR, window, "Hely kihagyás hiba", "Két csoport között 1 üres helyet kell hagyni, az egészségügyi szabályok miatt!");
                 break;
             case "NEM_FER_EL":
-                alert.setContentText("Nem lehet elhelyezni a " + groupNumber + " fős csoportot a kijelölt helyre, mert nem fér el!");
-                alert.setTitle("Kis hely hiba");
+                AlertMaker.make(Alert.AlertType.ERROR, window, "Kis hely hiba", "Nem lehet elhelyezni a " + groupNumber + " fős csoportot a kijelölt helyre, mert nem fér el!");
                 break;
             case "KIVETEL_HIBA":
-                alert.setContentText("Nem lehet a csoport közepéből kivenni embert!");
-                alert.setTitle("Csoport bontás hiba");
+                AlertMaker.make(Alert.AlertType.ERROR, window, "Csoport bontás hiba", "Nem lehet a csoport közepéből kivenni embert!");
         }
-        alert.show();
     }
 }

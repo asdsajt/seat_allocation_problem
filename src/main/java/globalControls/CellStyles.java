@@ -1,4 +1,4 @@
-package controller;
+package globalControls;
 
 import lombok.Getter;
 

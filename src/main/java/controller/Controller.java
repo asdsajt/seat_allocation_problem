@@ -1,5 +1,7 @@
 package controller;
 
+import globalControls.AlertMaker;
+import globalControls.CellStyles;
 import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -85,11 +87,7 @@ public class Controller {
         }
         switch (view.getSolveMethodComboBox().getValue()) {
             case "Válasszon...":
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setHeaderText(null);
-                alert.initOwner(view.getSolveButton().getScene().getWindow());
-                alert.setTitle("Megoldó hiba");
-                alert.setContentText("Először válasszon a megoldók közül!");
+                AlertMaker.make(Alert.AlertType.ERROR, view.getSolveButton().getScene().getWindow(), "Megoldó hiba", "Először válasszon a megoldók közül!");
                 break;
             case "Mohó algoritmus":
                 GreedySolver greedySolver = new GreedySolver(view.getRoomSpreadSheetView(), view.getGroupDefinitionTextArea().getText().trim());

@@ -1,16 +1,14 @@
 package solver.greedy;
 
-import controller.CellStyles;
+import globalControls.CellStyles;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
 import org.controlsfx.control.spreadsheet.Grid;
-import org.controlsfx.control.spreadsheet.GridBase;
 import org.controlsfx.control.spreadsheet.SpreadsheetCell;
 import org.controlsfx.control.spreadsheet.SpreadsheetView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 
 public class GreedySolver {
 
