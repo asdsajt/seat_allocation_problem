@@ -69,13 +69,13 @@ public class JsonImporter extends Importer{
             String id = parseString(room.get("id"));
             String theaterId = parseString(room.get("theater_id"));
             String name = parseString(room.get("name"));
-            int columnNum = parseInt(room.get("column_num"));
             int rowNum = parseInt(room.get("row_num"));
+            int columnNum = parseInt(room.get("column_num"));
             if (columnNum <= 0 || rowNum <= 0) {
                 System.out.println("Invalid sizing parameters at Room-index: " + id);   // TODO: Move it to GUI
                 continue;
             }
-            Room parsedRoom = new Room(id, theaterId, name, columnNum, rowNum);
+            Room parsedRoom = new Room(id, theaterId, name, rowNum, columnNum);
             parseSeats((JSONObject) room.get("rows"), parsedRoom);
             storage.addRoom(parsedRoom);
         }
