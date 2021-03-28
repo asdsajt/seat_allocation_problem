@@ -30,7 +30,7 @@ public class DatabaseHandler {
     private MongoClientURI uri = new MongoClientURI("mongodb+srv://dev_andras:VaYghVLpk9claZvL@cluster0.w1odn.mongodb.net/Theater?retryWrites=true&w=majority");
 
     public Room testRoom(){
-        Room room = new Room("RO-123", "TH-1", 4, 5);
+        Room room = new Room("RO-123", "TH-1", "TESZT ROOM SAVE", 4, 5);
 
         room.getRows()[0][2].setStatus(SeatStatus.Taken); room.getRows()[0][4].setStatus(SeatStatus.Taken);
         room.getRows()[1][2].setStatus(SeatStatus.Taken); room.getRows()[1][4].setStatus(SeatStatus.Taken);
@@ -176,6 +176,7 @@ public class DatabaseHandler {
         BasicDBObject roomObj = new BasicDBObject();
         roomObj.put("id", room.getId());
         roomObj.put("theater_id", room.getTheaterId());
+        roomObj.put("name", room.getName());
         roomObj.put("column_num", String.valueOf(room.getColumnNum()));
         roomObj.put("row_num", String.valueOf(room.getRowNum()));
 
@@ -247,9 +248,10 @@ public class DatabaseHandler {
                 if (isInteger(element, 10)){
                     String roomId =  jo.getJSONObject(element).getString("id");
                     String theaterId =  jo.getJSONObject(element).getString("theater_id");
+                    String name =  jo.getJSONObject(element).getString("name");
                     int rowNum =  Integer.parseInt(jo.getJSONObject(element).getString("row_num"));
                     int columnNum =  Integer.parseInt(jo.getJSONObject(element).getString("column_num"));
-                    Room room = new Room(roomId, theaterId, rowNum, columnNum);
+                    Room room = new Room(roomId, theaterId, name, rowNum, columnNum);
 
                     for (String rowElement: jo.getJSONObject(element).getJSONObject("rows").keySet()) {
                         String[] rowSplit = jo.getJSONObject(element).getJSONObject("rows").getString(rowElement).split(";");
