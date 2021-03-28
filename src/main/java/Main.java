@@ -19,7 +19,7 @@ public class Main extends Application {
         View mainView = new View();
         new Controller(mainView);
         Theater th = new Theater("Csiky Gergely");
-        JsonImporter jsonImporter = new JsonImporter();
+        JsonImporter jsonImporter = new JsonImporter(InputData.getInstance());
         jsonImporter.importFile(inFilePath);
         // DatabaseLoader.loadAll(inputData);
         JsonExporter jsonExporter = new JsonExporter(InputData.getInstance());
