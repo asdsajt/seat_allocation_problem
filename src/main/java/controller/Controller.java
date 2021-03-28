@@ -8,9 +8,12 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import javafx.stage.Modality;
+import model.Room;
 import org.controlsfx.control.spreadsheet.GridBase;
 import org.controlsfx.control.spreadsheet.SpreadsheetCell;
 import org.controlsfx.control.spreadsheet.SpreadsheetCellType;
+import popup_window.room_adder.RoomAdderController;
+import popup_window.room_adder.RoomAdderView;
 import popup_window.theater_adder.TheatherAdderController;
 import popup_window.theater_adder.TheatherAdderView;
 import solver.greedy.GreedySolver;
@@ -76,7 +79,18 @@ public class Controller {
 
 
     private void addRoom(ActionEvent actionEvent) {
-
+        RoomAdderView roomAdderView = new RoomAdderView();
+        roomAdderView.initOwner(view.getAddNewRoomButton().getScene().getWindow());
+        roomAdderView.initModality(Modality.APPLICATION_MODAL);
+        roomAdderView.setOnCloseRequest(event -> {
+            try {
+                roomAdderView.close();
+                System.out.println("ablak bezár");
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
+        new RoomAdderController(roomAdderView);
     }
 
     private void solverPressed(ActionEvent actionEvent) {
