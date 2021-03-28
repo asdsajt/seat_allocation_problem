@@ -11,26 +11,28 @@ public class Room {
 
     @Getter private final String id;
     @Getter private final String theaterId;
+    @Getter private final String name;
     @Getter private final int columnNum;
     @Getter private final int rowNum;
     @Getter private Seat[][] rows;
 
     // Only for importing with valid IDs
-    public Room(String id, String theaterId, int columnNum, int rowNum) {
+    public Room(String id, String theaterId, String name, int columnNum, int rowNum) {
         this.id = id;
         this.theaterId = theaterId;
+        this.name = name;
         this.columnNum = columnNum;
         this.rowNum = rowNum;
         generateSeats();
     }
 
     // Use this to instantiate a new Room
-    public Room(String theaterId, int columnNum, int rowNum) {
-        this(IdGenerator.generateId(DataType.Room), theaterId, columnNum, rowNum);
+    public Room(String theaterId, String name, int columnNum, int rowNum) {
+        this(IdGenerator.generateId(DataType.Room), theaterId, name, columnNum, rowNum);
     }
 
-    public Room(int columnNum, int rowNum) {
-        this("TH-Unknown", columnNum, rowNum);
+    public Room(String name, int columnNum, int rowNum) {
+        this("TH-Unknown", name, columnNum, rowNum);
     }
 
     public Seat[] getRow(int rowNum) {
@@ -68,6 +70,7 @@ public class Room {
         return "Room{" +
                 "id='" + id + '\'' +
                 ", theaterId='" + theaterId + '\'' +
+                ", name=" + name +
                 ", columnNum=" + columnNum +
                 ", rowNum=" + rowNum +
                 ", rows=" + String.join(", ", seatInfo) +

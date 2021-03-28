@@ -3,6 +3,7 @@
       {
          "id":"123",
          "theater_id":"1",
+         "name": "sz1",
          "column_num":"5",
          "row_num":"4",
          "rows":{
@@ -39,6 +40,7 @@
       {
          "id":"456",
          "theater_id":"2",
+         "name": "sz2",
          "column_num":"3",
          "row_num":"2",
          "rows":{

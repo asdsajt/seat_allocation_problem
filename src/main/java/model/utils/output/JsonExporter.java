@@ -37,6 +37,7 @@ public class JsonExporter extends Exporter{
             JSONObject roomDetails = new JSONObject();
             roomDetails.put("id", room.getId());
             roomDetails.put("theater_id", room.getTheaterId());
+            roomDetails.put("name", room.getName());
             roomDetails.put("column_num", room.getColumnNum());
             roomDetails.put("row_num", room.getRowNum());
             JSONObject rows = formatSeats(room);

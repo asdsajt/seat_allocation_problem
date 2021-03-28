@@ -22,7 +22,7 @@ public class Main extends Application {
         InputData inputData = new InputData();
         JsonImporter jsonImporter = new JsonImporter();
         jsonImporter.importFile(inFilePath, inputData);
-        DatabaseLoader.loadAll(inputData);
+        // DatabaseLoader.loadAll(inputData);
         JsonExporter jsonExporter = new JsonExporter();
         jsonExporter.exportFile(outFilePath, inputData);
     }
