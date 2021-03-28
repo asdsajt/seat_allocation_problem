@@ -69,7 +69,7 @@ public class TheatherAdderView extends Stage {
     private void addIntegerListeners() {
         rowNumberTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             try {
-                if (newValue.matches("\\d*")) {
+                if (!newValue.matches("\\d*")) {
                     rowNumberTextField.setText(newValue.replaceAll("[^\\d]", ""));
                 }
             } catch (Exception e) {
@@ -78,7 +78,7 @@ public class TheatherAdderView extends Stage {
         });
         columnNumberTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             try {
-                if (newValue.matches("\\d*")) {
+                if (!newValue.matches("\\d*")) {
                     columnNumberTextField.setText(newValue.replaceAll("[^\\d]", ""));
                 }
             } catch (Exception e) {
