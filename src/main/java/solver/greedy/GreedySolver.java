@@ -81,7 +81,7 @@ public class GreedySolver {
                             groupElement.setPlaced(true);
                         }
                     } else {
-                        cellId = end + groupElement.getGroupSize();
+                        cellId = end + 1;
                     }
                 }
                 rowId++;
