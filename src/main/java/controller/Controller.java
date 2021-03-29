@@ -116,8 +116,9 @@ public class Controller {
             new NullRoomSaverController(nullRoomSaverView, seatStatuses);
         } else {
             Room roomToSave = spreadSheetListeners.getCurrentRoom();
-            //todo az aktuális terem mentése
-            //todo currentRoom tartalmazza a mentéshez szükséges infókat
+
+            DatabaseHandler dbHandler = new DatabaseHandler();
+            dbHandler.updateRoom(roomToSave);
         }
     }
 
@@ -139,14 +140,17 @@ public class Controller {
     private void refreshRoomData(ActionEvent actionEvent) {
         String roomName = view.getRoomComboBox().getValue();
         String theaterName = view.getTheaterComboBox().getValue();
-        if(!roomName.equals("Válasszon termet...") || !theaterName.equals("Válasszon színházat...")) {
+
+        // Amikor egy szoba már meg van nyiva és egy másik színházat választok, akkor a room Combo Box null
+        if(!(roomName == null) && !roomName.equals("Válasszon termet...") && !theaterName.equals("Válasszon színházat...")) {
 
             String theaterId = getTheaterIdByName(theaterName);
 
             DatabaseHandler dbHandler = new DatabaseHandler();
-            Room[] rooms = dbHandler.getRoomsByTheaterId(theaterId);
+            Room[] rooms = dbHandler.getRoomsByTheaterId(theaterId); //null ha nincs ilyen szinházId-val terem
             for (Room room : rooms) {
                 if (room.getName().equals(roomName)){
+                    System.out.println(room.getRows()[0][0]);
                     spreadSheetListeners.setCurrentRoom(room);
                 }
             }

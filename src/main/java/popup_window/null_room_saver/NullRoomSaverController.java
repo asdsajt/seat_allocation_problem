@@ -73,7 +73,8 @@ public class NullRoomSaverController {
                     }
                 }
             }
-            //todo: a seat státusszal feltöltött room mentése kell ide
+
+            dbHandler.updateRoom(room);
 
             view.getAddButton().getScene().getWindow().fireEvent(new WindowEvent(view.getAddButton().getScene().getWindow(), WindowEvent.WINDOW_CLOSE_REQUEST));
         }
