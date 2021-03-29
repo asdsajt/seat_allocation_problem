@@ -34,12 +34,10 @@ public class Controller {
 
     private final View view;
     private final SpreadSheetClickListeners spreadSheetListeners;
-    private Room currentRoom;
 
 
     public Controller(View view) {
         this.view = view;
-        this.currentRoom = null;
         view.init();
         spreadSheetListeners = new SpreadSheetClickListeners(this.view.getRoomSpreadSheetView(), this.view.getRoomSpreadSheetView().getScene().getWindow());
 
@@ -94,7 +92,7 @@ public class Controller {
     }
 
     private void saveCurrentRoom(ActionEvent actionEvent) {
-        if(currentRoom == null) {
+        if(spreadSheetListeners.getCurrentRoom() == null) {
             SeatStatus[][] seatStatuses = new SeatStatus[view.getRoomSpreadSheetView().getGrid().getRowCount()][view.getRoomSpreadSheetView().getGrid().getColumnCount()];
             for (ObservableList<SpreadsheetCell> row : view.getRoomSpreadSheetView().getGrid().getRows()) {
                 for (SpreadsheetCell cell : row) {
@@ -117,6 +115,7 @@ public class Controller {
             });
             new NullRoomSaverController(nullRoomSaverView, seatStatuses);
         } else {
+            Room roomToSave = spreadSheetListeners.getCurrentRoom();
             //todo az aktuális terem mentése
             //todo currentRoom tartalmazza a mentéshez szükséges infókat
         }
@@ -148,13 +147,13 @@ public class Controller {
             Room[] rooms = dbHandler.getRoomsByTheaterId(theaterId);
             for (Room room : rooms) {
                 if (room.getName().equals(roomName)){
-                    currentRoom = room;
+                    spreadSheetListeners.setCurrentRoom(room);
                 }
             }
-            if (currentRoom != null) {
-                view.getRowNumberLabel().setText(currentRoom.getRowNum()+"");
-                view.getColumnNumberLabel().setText(currentRoom.getColumnNum()+"");
-                configureSpreadSheet(currentRoom.getRowNum(), currentRoom.getColumnNum(), currentRoom.getRows());
+            if (spreadSheetListeners.getCurrentRoom() != null) {
+                view.getRowNumberLabel().setText(spreadSheetListeners.getCurrentRoom().getRowNum()+"");
+                view.getColumnNumberLabel().setText(spreadSheetListeners.getCurrentRoom().getColumnNum()+"");
+                configureSpreadSheet(spreadSheetListeners.getCurrentRoom().getRowNum(), spreadSheetListeners.getCurrentRoom().getColumnNum(), spreadSheetListeners.getCurrentRoom().getRows());
             }
         }
     }

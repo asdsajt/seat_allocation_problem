@@ -8,6 +8,8 @@ import javafx.scene.control.TablePosition;
 import javafx.stage.Window;
 import lombok.Getter;
 import lombok.Setter;
+import model.Room;
+import model.utils.enums.SeatStatus;
 import org.controlsfx.control.spreadsheet.SpreadsheetCell;
 import org.controlsfx.control.spreadsheet.SpreadsheetView;
 
@@ -15,6 +17,8 @@ public class SpreadSheetClickListeners {
     @Getter
     private InvalidationListener cellDisableListener, allocationSelectorListener;
 
+    @Getter@Setter
+    private Room currentRoom;
 
     @Setter
     private int groupNumber;
@@ -29,6 +33,7 @@ public class SpreadSheetClickListeners {
      */
     public SpreadSheetClickListeners(SpreadsheetView spreadsheetView, Window window) {
         groupNumber = 1;
+        currentRoom = null;
 
         cellDisableListener = observable -> {
             try {
@@ -36,8 +41,14 @@ public class SpreadSheetClickListeners {
                 SpreadsheetCell cell = spreadsheetView.getGrid().getRows().get(cellpos.getRow()).get(cellpos.getColumn());
                 if (cell.getStyle().equals(CellStyles.NORMAL_CELL_STYLE)) {
                     cell.setStyle(CellStyles.BLOCKED_CELL_STYLE);
+                    if (currentRoom != null) {
+                        currentRoom.getSeat(cell.getRow(), cell.getColumn()).setStatus(SeatStatus.Removed);
+                    }
                 } else if (cell.getStyle().equals(CellStyles.BLOCKED_CELL_STYLE)) {
                     cell.setStyle(CellStyles.NORMAL_CELL_STYLE);
+                    if (currentRoom != null) {
+                        currentRoom.getSeat(cell.getRow(), cell.getColumn()).setStatus(SeatStatus.Empty);
+                    }
                 }
 
             } catch (IndexOutOfBoundsException ignore) {
