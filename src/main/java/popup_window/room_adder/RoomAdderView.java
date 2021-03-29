@@ -35,7 +35,7 @@ public class RoomAdderView extends Stage {
     }
 
     public void init() {
-        this.setTitle("Színház hozzáadása");
+        this.setTitle("Terem hozzáadása");
         Scene scene = new Scene(new Group());
         this.setScene(scene);
 
