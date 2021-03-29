@@ -1,5 +1,6 @@
 package controller;
 
+import com.mongodb.lang.Nullable;
 import database.DatabaseHandler;
 import globalControls.AlertMaker;
 import globalControls.CellStyles;
@@ -10,10 +11,14 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import javafx.stage.Modality;
 import model.Room;
+import model.Seat;
 import model.Theater;
+import model.utils.enums.SeatStatus;
 import org.controlsfx.control.spreadsheet.GridBase;
 import org.controlsfx.control.spreadsheet.SpreadsheetCell;
 import org.controlsfx.control.spreadsheet.SpreadsheetCellType;
+import popup_window.null_room_saver.NullRoomSaverController;
+import popup_window.null_room_saver.NullRoomSaverView;
 import popup_window.room_adder.RoomAdderController;
 import popup_window.room_adder.RoomAdderView;
 import popup_window.theater_adder.TheatherAdderController;
@@ -22,22 +27,25 @@ import solver.greedy.GreedySolver;
 import view.View;
 
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class Controller {
 
     private final View view;
     private final SpreadSheetClickListeners spreadSheetListeners;
+    private Room currentRoom;
 
 
     public Controller(View view) {
         this.view = view;
+        this.currentRoom = null;
         view.init();
         spreadSheetListeners = new SpreadSheetClickListeners(this.view.getRoomSpreadSheetView(), this.view.getRoomSpreadSheetView().getScene().getWindow());
 
         initComboBoxes();
         configureSpreadSheet(Integer.parseInt(view.getRowNumberLabel().getText()),
-                Integer.parseInt(view.getColumnNumberLabel().getText()));
+                Integer.parseInt(view.getColumnNumberLabel().getText()), null);
         createListeners();
     }
 
@@ -51,6 +59,11 @@ public class Controller {
         view.getSolveMethodComboBox().setValue("Válasszon...");
         view.getTheaterComboBox().setValue("Válasszon színházat...");
         view.getRoomComboBox().setValue("Válasszon termet...");
+        setTheaterComboBoxItems();
+
+    }
+
+    private void setTheaterComboBoxItems() {
         ArrayList<String> theaterNames = new ArrayList<>();
 
         DatabaseHandler dbHandler = new DatabaseHandler();
@@ -67,13 +80,61 @@ public class Controller {
      */
     private void createListeners() {
         view.getRoomSpreadSheetView().getSelectionModel().getSelectedCells().addListener(spreadSheetListeners.getAllocationSelectorListener());
+
         view.getDisableSeatsCheckBox().selectedProperty().addListener(this::disableSeatsChanged);
+
         view.getGroupNumberComboBox().setOnAction(this::groupNumberChanged);
         view.getTheaterComboBox().setOnAction(this::fillRoomComboBoxData);
         view.getRoomComboBox().setOnAction(this::refreshRoomData);
+
+        view.getSaveCurrentRoomButton().setOnAction(this::saveCurrentRoom);
         view.getSolveButton().setOnAction(this::solverPressed);
         view.getAddNewTheaterButton().setOnAction(this::addTheater);
         view.getAddNewRoomButton().setOnAction(this::addRoom);
+    }
+
+    private void saveCurrentRoom(ActionEvent actionEvent) {
+        if(currentRoom == null) {
+            SeatStatus[][] seatStatuses = new SeatStatus[view.getRoomSpreadSheetView().getGrid().getRowCount()][view.getRoomSpreadSheetView().getGrid().getColumnCount()];
+            for (ObservableList<SpreadsheetCell> row : view.getRoomSpreadSheetView().getGrid().getRows()) {
+                for (SpreadsheetCell cell : row) {
+                    if(cell.getStyle().equals(CellStyles.BLOCKED_CELL_STYLE))
+                        seatStatuses[cell.getRow()][cell.getColumn()] = SeatStatus.Removed;
+                    else
+                        seatStatuses[cell.getRow()][cell.getColumn()] = SeatStatus.Empty;
+                }
+            }
+            NullRoomSaverView nullRoomSaverView = new NullRoomSaverView();
+            nullRoomSaverView.initOwner(view.getAddNewTheaterButton().getScene().getWindow());
+            nullRoomSaverView.initModality(Modality.APPLICATION_MODAL);
+            nullRoomSaverView.setOnCloseRequest(event -> {
+                try {
+                    nullRoomSaverView.close();
+                    refreshRoomComboBxDataAfterDB(nullRoomSaverView.getTheaterComboBox().getValue());
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            });
+            new NullRoomSaverController(nullRoomSaverView, seatStatuses);
+        } else {
+            //todo az aktuális terem mentése
+            //todo currentRoom tartalmazza a mentéshez szükséges infókat
+        }
+    }
+
+    private void refreshRoomComboBxDataAfterDB(String modifiedTheatherName) {
+        if (!modifiedTheatherName.equals("Válasszon színházat...") && modifiedTheatherName.equals(view.getTheaterComboBox().getValue())) {
+            String theaterId = getTheaterIdByName(modifiedTheatherName);
+            ArrayList<String> roomNames = new ArrayList<>();
+
+            DatabaseHandler dbHandler = new DatabaseHandler();
+            Room[] rooms = dbHandler.getRoomsByTheaterId(theaterId);
+            for (Room room : rooms) {
+                roomNames.add(room.getName());
+            }
+
+            view.getRoomComboBox().setItems(FXCollections.observableList(roomNames));
+        }
     }
 
     private void refreshRoomData(ActionEvent actionEvent) {
@@ -82,18 +143,19 @@ public class Controller {
         if(!roomName.equals("Válasszon termet...") || !theaterName.equals("Válasszon színházat...")) {
 
             String theaterId = getTheaterIdByName(theaterName);
-            Room resultRoom;
 
             DatabaseHandler dbHandler = new DatabaseHandler();
             Room[] rooms = dbHandler.getRoomsByTheaterId(theaterId);
             for (Room room : rooms) {
                 if (room.getName().equals(roomName)){
-                    resultRoom = room;
+                    currentRoom = room;
                 }
             }
-
-            //Kellett a színház neve, mert a termek neve lehet azonos.
-            //TODO: resultRoom-ban van a szoba
+            if (currentRoom != null) {
+                view.getRowNumberLabel().setText(currentRoom.getRowNum()+"");
+                view.getColumnNumberLabel().setText(currentRoom.getColumnNum()+"");
+                configureSpreadSheet(currentRoom.getRowNum(), currentRoom.getColumnNum(), currentRoom.getRows());
+            }
         }
     }
 
@@ -134,7 +196,7 @@ public class Controller {
         theatherAdderView.setOnCloseRequest(event -> {
             try {
                 theatherAdderView.close();
-                System.out.println("ablak bezár");
+                setTheaterComboBoxItems();
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -150,7 +212,7 @@ public class Controller {
         roomAdderView.setOnCloseRequest(event -> {
             try {
                 roomAdderView.close();
-                System.out.println("ablak bezár");
+                refreshRoomComboBxDataAfterDB(roomAdderView.getTheaterComboBox().getValue());
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -211,14 +273,14 @@ public class Controller {
      * - gridben a cellák magasságát állítja
      * - spreadSheethez hozzáadja a gridet
      * - spreadSheet oszlopainak méretezése
-     *
-     * @param rowNumber:    gridben lévő sorok száma
-     * @param columnNumber: gridben lévő oszlopok száma
+     *  @param rowNumber :    gridben lévő sorok száma
+     * @param columnNumber : gridben lévő oszlopok száma
+     * @param rows: aktuális terem
      */
-    private void configureSpreadSheet(int rowNumber, int columnNumber) {
+    private void configureSpreadSheet(int rowNumber, int columnNumber, @Nullable Seat[][] rows) {
         view.getRoomSpreadSheetView().setGrid(null);
 
-        GridBase gridBase = createGrid(rowNumber, columnNumber);
+        GridBase gridBase = createGrid(rowNumber, columnNumber, rows);
 
         /**
          * Automatikus méretezés, hogy ne kelljen görgetni
@@ -240,6 +302,7 @@ public class Controller {
         view.getRoomSpreadSheetView().setGrid(gridBase);
         view.getRoomSpreadSheetView().getColumns().forEach(col -> {
             try {
+                col.setMinWidth(maxSize.get());
                 col.setMaxWidth(maxSize.get());
             } catch (Exception e) {
                 throw new RuntimeException(e);
@@ -250,18 +313,22 @@ public class Controller {
     /**
      * SpreadSheetView-ban megjelenő Griden lévő cellák inicializálása
      *
-     * @param rowNumber:    sor szám
-     * @param columnNumber: oszlop szám
+     * @param rowNumber :    sor szám
+     * @param columnNumber : oszlop szám
+     * @param currentRows: ha van betöltött terem, akkor a cella tiltást is elvégzi
      * @return
      */
-    private GridBase createGrid(int rowNumber, int columnNumber) {
+    private GridBase createGrid(int rowNumber, int columnNumber, @Nullable Seat[][] currentRows) {
         GridBase gridBase = new GridBase(rowNumber, columnNumber);
         ObservableList<ObservableList<SpreadsheetCell>> rows = FXCollections.observableArrayList();
         for (int i = 0; i < rowNumber; i++) {
             ObservableList<SpreadsheetCell> rowList = FXCollections.observableArrayList();
             for (int j = 0; j < columnNumber; j++) {
                 SpreadsheetCell cell = SpreadsheetCellType.STRING.createCell(i, j, 1, 1, "");
-                cell.setStyle(CellStyles.NORMAL_CELL_STYLE);
+                if(currentRows != null && currentRows[i][j].getStatus() == SeatStatus.Removed)
+                    cell.setStyle(CellStyles.BLOCKED_CELL_STYLE);
+                else
+                    cell.setStyle(CellStyles.NORMAL_CELL_STYLE);
                 rowList.add(cell);
             }
             rows.add(rowList);
