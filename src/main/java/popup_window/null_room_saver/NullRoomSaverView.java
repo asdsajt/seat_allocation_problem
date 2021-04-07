@@ -1,21 +1,26 @@
-package popup_window.room_adder;
+package popup_window.null_room_saver;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import lombok.Getter;
 
-public class RoomAdderView extends Stage {
+public class NullRoomSaverView extends Stage {
 
     @Getter
-    private TextField roomNameTextField, rowNumberTextField, columnNumberTextField;
+    private TextField roomNameTextField;
+    @Getter
+    private Label rowNumberLabel, columnNumberLabel;
     @Getter
     private Button addButton, backButton;
     @Getter
@@ -23,19 +28,17 @@ public class RoomAdderView extends Stage {
 
     private GridPane mainGridPane;
 
-    public RoomAdderView() {
-        addButton = new Button("Hozzáadás");
+    public NullRoomSaverView() {
+        addButton = new Button("Mentés");
         backButton = new Button("Vissza");
 
         theaterComboBox = new ComboBox<>();
 
         roomNameTextField = new TextField();
-        rowNumberTextField = new TextField();
-        columnNumberTextField = new TextField();
     }
 
-    public void init() {
-        this.setTitle("Terem hozzáadása");
+    public void init(int rowNumber, int colNumber) {
+        this.setTitle("Terem hozzáadása és mentése");
         Scene scene = new Scene(new Group());
         this.setScene(scene);
 
@@ -49,16 +52,26 @@ public class RoomAdderView extends Stage {
 
         mainGridPane.add(titleCreator(), 0, 0, 2, 1);
         initLabels();
-        addIntegerListeners();
 
         mainGridPane.add(styleToComboBox(theaterComboBox), 1,1);
         mainGridPane.add(styleToTextField(roomNameTextField), 1,2);
-        mainGridPane.add(styleToTextField(rowNumberTextField), 1,3);
-        mainGridPane.add(styleToTextField(columnNumberTextField), 1,4);
+        rowNumberLabel = new Label(rowNumber + "");
+        mainGridPane.add(styleToLabel(rowNumberLabel), 1,3);
+        columnNumberLabel = new Label(colNumber + "");
+        mainGridPane.add(styleToLabel(columnNumberLabel), 1,4);
         mainGridPane.add(buttons(), 0,5,2,1);
         anchorPane.getChildren().add(mainGridPane);
         this.show();
     }
+
+    private Node styleToLabel(Label label) {
+        label.setStyle("-fx-font-size: 14px");
+        label.setPrefWidth(200);
+        label.setPadding(new Insets(6, 0, 6, 0));
+
+        return label;
+    }
+
 
     private Node styleToComboBox(ComboBox comboBox) {
         comboBox.setStyle("-fx-font-size: 14px;");
@@ -70,27 +83,6 @@ public class RoomAdderView extends Stage {
         textField.setStyle("-fx-font-size: 14px;");
         textField.setMaxWidth(200);
         return textField;
-    }
-
-    private void addIntegerListeners() {
-        rowNumberTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            try {
-                if (!newValue.matches("\\d*")) {
-                    rowNumberTextField.setText(newValue.replaceAll("[^\\d]", ""));
-                }
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        });
-        columnNumberTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            try {
-                if (!newValue.matches("\\d*")) {
-                    columnNumberTextField.setText(newValue.replaceAll("[^\\d]", ""));
-                }
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        });
     }
 
     private Node buttons() {
@@ -125,7 +117,7 @@ public class RoomAdderView extends Stage {
     }
 
     private Node titleCreator() {
-        Label title = new Label("Új Terem hozzáadás");
+        Label title = new Label("Új Terem mentése");
         title.setStyle("-fx-font-size: 22px; -fx-alignment: center; -fx-padding: 20 0 20 0; -fx-font-weight: bold");
         title.setPrefWidth(mainGridPane.getPrefWidth());
 

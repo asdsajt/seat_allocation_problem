@@ -48,9 +48,7 @@ public class GreedySolver {
         Grid grid = roomSpreadSheetView.getGrid();
         for (GroupElement groupElement : groupElementArrayList) {
             int rowId = 0;
-            System.out.println(grid.getRows().size());
             while(rowId < grid.getRows().size() && !groupElement.isPlaced()) {
-                System.out.println("asdf");
                 int cellId = 0;
                 while(cellId < grid.getRows().get(rowId).size() && !groupElement.isPlaced()) {
                     int start = cellId;
@@ -68,10 +66,8 @@ public class GreedySolver {
                         end++;
                     }
 
-                    System.out.println(start + " - " + end);
                     if(end < grid.getRows().get(rowId).size() && grid.getRows().get(rowId).get(end).getStyle().equals(CellStyles.SELECTED_CELL_STYLE))
                         end -= 1;
-                    System.out.println(groupElement.getGroupSize() + ": "+start + " - " + end + " sor: " + rowId);
                     if(end - start >= groupElement.getGroupSize()) {
                         for(int j = 0; j < groupElement.getGroupSize(); j++) {
                             grid.getRows().get(rowId).get(start + j).setStyle(CellStyles.SELECTED_CELL_STYLE);
