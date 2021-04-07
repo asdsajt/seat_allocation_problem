@@ -1,6 +1,7 @@
 package model;
 
 import lombok.Getter;
+import lombok.Setter;
 import model.utils.enums.DataType;
 import model.utils.enums.SeatStatus;
 import model.utils.general.IdGenerator;
@@ -11,12 +12,14 @@ public class Room {
 
     @Getter private final String id;
     @Getter private final String theaterId;
-    @Getter private final String name;
     @Getter private final int columnNum;
     @Getter private final int rowNum;
+    @Getter @Setter private String name;
     @Getter private Seat[][] rows;
 
-    // Only for importing with valid IDs
+    /**
+     * Use this to import already existing Rooms!
+     */
     public Room(String id, String theaterId, String name, int rowNum, int columnNum) {
         this.id = id;
         this.theaterId = theaterId;
@@ -26,7 +29,9 @@ public class Room {
         generateSeats();
     }
 
-    // Use this to instantiate a new Room
+    /**
+     * Use this to instantiate a new Rooms!
+     */
     public Room(String theaterId, String name, int rowNum, int columnNum) {
         this(IdGenerator.generateId(DataType.Room), theaterId, name, rowNum, columnNum);
     }
@@ -47,6 +52,9 @@ public class Room {
         this.rows[rowNum][colNum] = seat;
     }
 
+    /**
+     * Fills the rows array with empty Seats.
+     */
     private void generateSeats() {
         rows = new Seat[this.rowNum][this.columnNum];
         for(int i = 0; i < this.rowNum; i++) {

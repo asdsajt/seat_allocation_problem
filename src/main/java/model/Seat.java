@@ -17,6 +17,12 @@ public class Seat {
         this.roomId = roomId;
     }
 
+    /**
+     * Use this to generate a Seat.position String!
+     * @param row of the Room
+     * @param column of the Room
+     * @return 'row:column'
+     */
     public static String generatePositionString(int row, int column) {
         return row + ":" + column;
     }

@@ -1,7 +1,5 @@
 package model.utils.input;
 
-import model.utils.temp.InputData;
-
 public abstract class Importer {
 
     public static final int nullIntValue = -999;
