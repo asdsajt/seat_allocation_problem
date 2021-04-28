@@ -21,6 +21,7 @@ import popup_window.room_adder.RoomAdderController;
 import popup_window.room_adder.RoomAdderView;
 import popup_window.theater_adder.TheatherAdderController;
 import popup_window.theater_adder.TheatherAdderView;
+import solver.Genetic.GeneticParser;
 import solver.greedy.GreedySolver;
 import view.View;
 
@@ -236,6 +237,12 @@ public class Controller {
             case "Mohó algoritmus":
                 GreedySolver greedySolver = new GreedySolver(view.getRoomSpreadSheetView(), view.getGroupDefinitionTextArea().getText().trim());
                 view.getRoomSpreadSheetView().setGrid(greedySolver.solve());
+                break;
+            case "Genetikus algoritmus":
+                GeneticParser sol = new GeneticParser(spreadSheetListeners.getCurrentRoom(), spreadSheetListeners.getCurrentRoom().getRowNum(), spreadSheetListeners.getCurrentRoom().getColumnNum(), view.getGroupDefinitionTextArea().getText().trim(), view.getRoomSpreadSheetView());
+                Room res = sol.executeSolver();
+                if(res == null) break;
+                view.getRoomSpreadSheetView().setGrid(sol.roomToView(res));
                 break;
         }
         if (view.getDisableSeatsCheckBox().isSelected()) {
