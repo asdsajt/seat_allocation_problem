@@ -281,6 +281,8 @@ public class LPParser {
                 twoDim[cords.getKey()][cords.getValue()] = 1;
                 starterPoints.put(correctList.get(entry.getKey()), new Pair<Integer, Integer>(cords.getKey(), cords.getValue()+1));
             }
+            Pair<Integer, Integer> cords = starterPoints.get(correctList.get(entry.getKey()));
+            starterPoints.put(correctList.get(entry.getKey()), new Pair<Integer, Integer>(cords.getKey(), cords.getValue()+1));
         }
 
         for(int i = 0; i < oldRoom.getRowNum(); i++) {

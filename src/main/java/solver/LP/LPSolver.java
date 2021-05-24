@@ -62,15 +62,16 @@ public class LPSolver {
             if(cplex.solve()){
                 for (int i = 0; i < places.length; i++) {
                     for (int j = 0; j < people.length; j++) {
-                        System.out.println(cplex.getValue(vars[i][j]) + "\t");
+                        System.out.print((int)Math.abs(cplex.getValue(vars[i][j])) + "\t");
                         if(cplex.getValue(vars[i][j]) == 1){
                             res.put(j, i);
                         }
                     }
                     System.out.println();
                 }
+                System.out.println();
                 System.out.println("Status: " + cplex.getStatus());
-                System.out.println("Obj Value" + cplex.getObjValue());
+                System.out.println("Obj Value: " + cplex.getObjValue());
                 System.out.println();
                 return res;
             }
