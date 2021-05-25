@@ -20,7 +20,7 @@ public class View extends Stage {
     private SpreadsheetView roomSpreadSheetView;
 
     @Getter
-    private Button addNewTheaterButton, addNewRoomButton, saveCurrentRoomButton, groupDefinitionImportButton, groupDefinitionExportButton, solveButton;
+    private Button addNewTheaterButton, addNewRoomButton, saveCurrentRoomButton, solveButton;
 
     @Getter
     private Label rowNumberLabel, columnNumberLabel;
@@ -41,10 +41,6 @@ public class View extends Stage {
         addNewTheaterButton = new Button("Hozzáadás");
         addNewRoomButton = new Button("Hozzáadás");
         saveCurrentRoomButton = new Button("Mentés");
-        groupDefinitionImportButton = new Button();
-        groupDefinitionImportButton.setGraphic(twoLineVBox("Csoport definíció", "importálás"));
-        groupDefinitionExportButton = new Button();
-        groupDefinitionExportButton.setGraphic(twoLineVBox("Csoport definíció", "exportálás"));
         solveButton = new Button("Megoldás");
 
         rowNumberLabel = new Label("15");
@@ -138,10 +134,9 @@ public class View extends Stage {
         rightSideGridPane.add(setH2Properties("Gépi megoldó"), 0, 12, 2, 1);
         rightSideGridPane.add(setNormalTextProperties("Csoportok meghatározása\n(csoportok elválasztása ;-vel)"), 0, 13, 2, 1);
         rightSideGridPane.add(setTextAreaProperties(groupDefinitionTextArea), 0, 14, 2, 1);
-        rightSideGridPane.add(buttonPositioner(setButtonProperties(groupDefinitionImportButton), setButtonProperties(groupDefinitionExportButton)), 0, 15, 2, 1);
-        rightSideGridPane.add(setNormalTextProperties("Megoldó kiválasztása"), 0, 16);
-        rightSideGridPane.add(setComboBoxProperties(solveMethodComboBox), 1, 16);
-        rightSideGridPane.add(addNoteToHbox(setButtonProperties(solveButton)), 0, 17);
+        rightSideGridPane.add(setNormalTextProperties("Megoldó kiválasztása"), 0, 15);
+        rightSideGridPane.add(setComboBoxProperties(solveMethodComboBox), 1, 15);
+        rightSideGridPane.add(addNoteToHbox(setButtonProperties(solveButton)), 0, 16);
 
         mainBorderPane.setRight(rightSideGridPane);
     }
